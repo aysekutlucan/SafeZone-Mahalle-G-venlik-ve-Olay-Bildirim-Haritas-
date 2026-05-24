@@ -28,4 +28,11 @@ def create_app(config_name='default'):
     from app.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    # Flask-Login: oturumdan kullanıcıyı yükle
+    from app.models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     return app

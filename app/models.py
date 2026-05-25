@@ -33,6 +33,8 @@ class Incident(db.Model):
     description = db.Column(db.Text)
     category = db.Column(db.String(50), nullable=False)
     neighborhood_name = db.Column(db.String(100), nullable=False)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

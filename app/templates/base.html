@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else 'SafeZone' }}</title>
+</head>
+<body>
+    <div>
+        <a href="{{ url_for('main.index') }}">Ana Sayfa</a> | 
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.profile') }}">Profilim</a> | 
+            <a href="{{ url_for('auth.logout') }}">Çıkış Yap</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Giriş Yap</a> | 
+            <a href="{{ url_for('auth.register') }}">Kayıt Ol</a>
+        {% endif %}
+    </div>
+    
+    <hr>
+    
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li>[{{ category }}] {{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

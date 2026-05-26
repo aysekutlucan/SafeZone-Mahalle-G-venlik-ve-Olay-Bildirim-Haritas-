@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <h1>SafeZone Ana Sayfasına Hoş Geldiniz! Altyapı başarıyla çalışıyor.</h1>
     <hr>
     
@@ -10,6 +14,8 @@
     {% endif %}
 
     <h2>Son Olaylar</h2>
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <br>
     <ul>
         {% for incident in incidents %}
             <li>
@@ -24,4 +30,36 @@
             <li>Henüz bildirilmiş bir olay yok.</li>
         {% endfor %}
     </ul>
+
+    <script id="incidents-data" type="application/json">
+        [
+            {% for incident in incidents %}
+            {
+                "title": "{{ incident.title | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}",
+                "category": "{{ incident.category | replace('\"', '\\\"') }}",
+                "latitude": "{{ incident.latitude }}",
+                "longitude": "{{ incident.longitude }}",
+                "description": "{{ incident.description | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    </script>
+
+    <script>
+        var map = L.map('map').setView([39.92077, 32.85411], 6);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        const incidentsData = JSON.parse(document.getElementById('incidents-data').textContent);
+        incidentsData.forEach(incident => {
+            if (incident.latitude && incident.longitude && incident.latitude !== "None" && incident.longitude !== "None") {
+                var lat = parseFloat(incident.latitude);
+                var lng = parseFloat(incident.longitude);
+                var marker = L.marker([lat, lng]).addTo(map);
+                marker.bindPopup(`<b>${incident.title}</b><br>Kategori: ${incident.category}<br>${incident.description}`);
+            }
+        });
+    </script>
 {% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <h2>Yeni Olay Bildir</h2>
     <form method="POST" action="">
         {{ form.hidden_tag() }}
@@ -37,6 +41,9 @@
             {% endfor %}
         </div>
         <br>
+        
+        <div id="map" style="width: 100%; height: 400px; margin-bottom: 15px;"></div>
+
         <div>
             {{ form.latitude.label }}<br>
             {{ form.latitude() }}
@@ -57,4 +64,27 @@
             {{ form.submit() }}
         </div>
     </form>
+
+    <script>
+        var map = L.map('map').setView([39.92077, 32.85411], 6);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var marker;
+
+        map.on('click', function(e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lng = e.latlng.lng.toFixed(6);
+
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([lat, lng]).addTo(map);
+        });
+    </script>
 {% endblock %}

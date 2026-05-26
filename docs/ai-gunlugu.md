@@ -19,3 +19,13 @@
 2. **Ham Arayüz İskeletleri (Sıfır Tasarım):** Arayüz tasarımı 4. Güne bırakılarak, yalnızca sistemin fonksiyonel çalışmasını doğrulayacak ham `base.html`, `index.html`, `login.html` ve `register.html` şablonları inşa edildi.
 3. **Olay Bildirim (Incident) Altyapısı:** Kullanıcıların mahallelerinde gerçekleşen olayları bildirebileceği `IncidentForm` hazırlandı. Eksik olan `latitude` ve `longitude` sütunları `app/models.py` içerisine eklenerek veritabanı göç (migration) işlemleri (`flask db init/migrate/upgrade`) başarıyla tamamlandı. `/incident/new` rotası ile veri akışı sağlandı.
 4. **Kullanıcı Profil Paneli (Dashboard):** `@login_required` ile korunan `/profile` rotası kurularak, kullanıcıların bildirdikleri geçmiş olayların `current_user.incidents` üzerinden dökümü yapıldı.
+
+# AI Geliştirme Günlüğü - Oturum 3
+
+**Tarih:** 26.05.2026
+**Kullanılan Model:** Gemini 3.1 Pro (High)
+
+### Yapılan İşlemler:
+1. **Harita Entegrasyonu ve Dinamik Veri:** "Sıfır tasarım, sıfır CSS" prensibi doğrultusunda Leaflet.js CDN üzerinden projeye dahil edildi. `app/templates/main/index.html` ve `app/templates/main/create_incident.html` dosyalarına harita konteynerleri eklendi.
+2. **Haritadan Koordinat Yakalama:** Olay bildirim sayfasında kullanıcıların haritaya tıklayarak koordinat seçmesini sağlayan ve seçilen enlem/boylam değerlerini form alanlarına aktaran bir JavaScript olay dinleyicisi entegre edildi.
+3. **JSON Veri Adası (Data Island) Mimarisi:** IDE'lerin Jinja2 syntax'ını JavaScript hatası olarak işaretlemesini engellemek için, veritabanından çekilen olay verileri doğrudan JavaScript bloğuna değil, `type="application/json"` olan bir veri adasına yazdırıldı. JavaScript'in bu veriyi `JSON.parse()` ile güvenli şekilde tüketmesi sağlandı.

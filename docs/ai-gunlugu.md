@@ -29,3 +29,11 @@
 1. **Harita Entegrasyonu ve Dinamik Veri:** "Sıfır tasarım, sıfır CSS" prensibi doğrultusunda Leaflet.js CDN üzerinden projeye dahil edildi. `app/templates/main/index.html` ve `app/templates/main/create_incident.html` dosyalarına harita konteynerleri eklendi.
 2. **Haritadan Koordinat Yakalama:** Olay bildirim sayfasında kullanıcıların haritaya tıklayarak koordinat seçmesini sağlayan ve seçilen enlem/boylam değerlerini form alanlarına aktaran bir JavaScript olay dinleyicisi entegre edildi.
 3. **JSON Veri Adası (Data Island) Mimarisi:** IDE'lerin Jinja2 syntax'ını JavaScript hatası olarak işaretlemesini engellemek için, veritabanından çekilen olay verileri doğrudan JavaScript bloğuna değil, `type="application/json"` olan bir veri adasına yazdırıldı. JavaScript'in bu veriyi `JSON.parse()` ile güvenli şekilde tüketmesi sağlandı.
+## AI Geliştirme Günlüğü - Oturum 4
+**Tarih:** 28.05.2026  
+**Kullanılan Model:** Gemini 3.1 Pro (High) & Manuel Müdahale  
+
+### Yapılan İşlemler:
+1. **Kurumsal Tasarım Altyapısı (Base UI):** Projenin istatistiki analiz ve haritalandırma amacına uygun, devlet/emniyet ciddiyetinde, güven veren bir "Kurumsal Dark-Blue" tema altyapısı kuruldu. Arka plan `#1e293b` tonlarına çekildi, yazı fontu olarak `Roboto` entegre edildi.
+2. **Emniyet Navbar & Kalkan Logosu:** Bootstrap Icons projeye dahil edilerek sol üst köşeye güveni temsil eden bir kalkan simgesi yerleştirildi.
+3. **Bağımlılık Çözümü:** Kayıt ve giriş formlarındaki e-posta validasyonu için eksik olan `email_validator` Python kütüphanesi sisteme yüklendi ve çalışma ortamı hatasız hale getirildi.

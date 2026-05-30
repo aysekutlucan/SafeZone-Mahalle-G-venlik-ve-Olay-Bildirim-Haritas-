@@ -49,3 +49,4 @@
    - Sağ tarafa **CartoDB Dark Matter** tabanlı taktiksel karanlık harita katmanı entegre edildi.
    - Üst tarafa dinamik ihbar sayısı ve sistem durumu rozetleri içeren kurumsal bir karşılama bandı yerleştirildi.
 3. **İnteraktif Harita Odaklanma:** Sol listedeki ihbar kartlarına tıklandığında haritanın pürüzsüz animasyonla o koordinata odaklanmasını ve marker balonunun (popup) otomatik açılmasını sağlayan dinamik JavaScript mekanizması yazıldı.
+4. **Sayfalama (Pagination) Altyapısı:** Ana sayfa ihbar listesinde `Flask-SQLAlchemy`'nin `paginate()` yöntemi kullanılarak sayfa başına 5 ihbar sınırı getirildi. Sol ihbar listesinin altına kurumsal temayla uyumlu Bootstrap 5 sayfalama navigasyonu entegre edilerek hem backend hem frontend tarafında sayfalama gereksinimi tamamlandı.

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
 from app.main import main_bp
@@ -7,8 +7,11 @@ from app.models import Incident
 
 @main_bp.route('/')
 def index():
-    incidents = Incident.query.order_by(Incident.created_at.desc()).all()
-    return render_template('main/index.html', incidents=incidents)
+    page = request.args.get('page', 1, type=int)
+    all_incidents = Incident.query.order_by(Incident.created_at.desc()).all()
+    pagination = Incident.query.order_by(Incident.created_at.desc()).paginate(page=page, per_page=5, error_out=False)
+    incidents = pagination.items
+    return render_template('main/index.html', incidents=incidents, pagination=pagination, all_incidents=all_incidents)
 
 @main_bp.route('/incident/new', methods=['GET', 'POST'])
 @login_required

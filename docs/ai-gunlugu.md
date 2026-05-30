@@ -37,3 +37,15 @@
 1. **Kurumsal Tasarım Altyapısı (Base UI):** Projenin istatistiki analiz ve haritalandırma amacına uygun, devlet/emniyet ciddiyetinde, güven veren bir "Kurumsal Dark-Blue" tema altyapısı kuruldu. Arka plan `#1e293b` tonlarına çekildi, yazı fontu olarak `Roboto` entegre edildi.
 2. **Emniyet Navbar & Kalkan Logosu:** Bootstrap Icons projeye dahil edilerek sol üst köşeye güveni temsil eden bir kalkan simgesi yerleştirildi.
 3. **Bağımlılık Çözümü:** Kayıt ve giriş formlarındaki e-posta validasyonu için eksik olan `email_validator` Python kütüphanesi sisteme yüklendi ve çalışma ortamı hatasız hale getirildi.
+
+## AI Geliştirme Günlüğü - Oturum 5
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Harita Alanı Sınırlandırılması:** Harita Ankara (Çankaya/Kızılay odaklı) simülasyon alanıyla (`southWest: 39.8800, 32.8000`, `northEast: 39.9500, 32.8800`) sınırlandırıldı. `maxBounds`, `minZoom` ve `maxBoundsViscosity` eklenerek kullanıcının sınır dışına kayması engellendi.
+2. **Simülasyon Paneli Arayüzü (Hybrid Grid):** `app/templates/main/index.html` dosyası tamamen yenilenerek jürinin beğeneceği modern bir simülasyon paneline dönüştürüldü.
+   - Sol tarafa kategorilerine göre renkli kenarlık/rozetler içeren kaydırılabilir interaktif ihbar kartları yerleştirildi.
+   - Sağ tarafa **CartoDB Dark Matter** tabanlı taktiksel karanlık harita katmanı entegre edildi.
+   - Üst tarafa dinamik ihbar sayısı ve sistem durumu rozetleri içeren kurumsal bir karşılama bandı yerleştirildi.
+3. **İnteraktif Harita Odaklanma:** Sol listedeki ihbar kartlarına tıklandığında haritanın pürüzsüz animasyonla o koordinata odaklanmasını ve marker balonunun (popup) otomatik açılmasını sağlayan dinamik JavaScript mekanizması yazıldı.

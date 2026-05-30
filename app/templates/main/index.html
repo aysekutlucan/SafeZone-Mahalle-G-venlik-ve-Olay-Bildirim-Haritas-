@@ -5,32 +5,200 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <h1>SafeZone Ana Sayfasına Hoş Geldiniz! Altyapı başarıyla çalışıyor.</h1>
-    <hr>
-    
-    {% if current_user.is_authenticated %}
-        <a href="{{ url_for('main.new_incident') }}">Yeni Olay Bildir</a>
-        <br><br>
-    {% endif %}
+    <style>
+        /* Simulation Banner */
+        .simulation-banner {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-left: 5px solid #38bdf8; /* Sleek cyber blue border */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
 
-    <h2>Son Olaylar</h2>
-    <div id="map" style="width: 100%; height: 400px;"></div>
-    <br>
-    <ul>
-        {% for incident in incidents %}
-            <li>
-                <strong>{{ incident.title }}</strong> - Kategori: {{ incident.category }} 
-                (Mahalle: {{ incident.neighborhood_name }})<br>
-                <em>Koordinatlar: [{{ incident.latitude }}, {{ incident.longitude }}]</em><br>
-                <p>{{ incident.description }}</p>
-                <small>Bildiren: {{ incident.author.username }} | Tarih: {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-            </li>
-            <br>
-        {% else %}
-            <li>Henüz bildirilmiş bir olay yok.</li>
-        {% endfor %}
-    </ul>
+        /* Pulse animation for active simulation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
 
+        /* Incident List Styles */
+        .incident-list-header {
+            font-weight: 700;
+            color: #cbd5e1;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 0.5rem;
+        }
+
+        .scrollable-incident-list {
+            max-height: 550px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Webkit Scrollbar Customization */
+        .scrollable-incident-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollable-incident-list::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .scrollable-incident-list::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        .scrollable-incident-list::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Incident Card Styles */
+        .incident-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .incident-card:hover {
+            background-color: #24324a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            border-color: #38bdf8;
+        }
+
+        .incident-card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .incident-card-desc {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Map Container Styles */
+        .map-wrapper {
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        #map {
+            width: 100%;
+            height: 550px;
+            z-index: 1;
+        }
+
+        /* Dark Leaflet Popup Styling */
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        }
+        .leaflet-popup-close-button {
+            color: #cbd5e1 !important;
+        }
+    </style>
+
+    <!-- Upper Welcome Banner -->
+    <div class="simulation-banner p-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+            <h1 class="h3 mb-2 text-white fw-bold d-flex align-items-center gap-2">
+                <i class="bi bi-broadcast text-danger animate-pulse"></i>
+                SafeZone: Çankaya Bölgesi Güvenlik Simülasyon Paneli
+            </h1>
+            <p class="text-muted mb-0">Ankara Kızılay ve Çankaya bölgesi olay izleme ve anlık simülasyon konsolu.</p>
+        </div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="badge bg-primary px-3 py-2 rounded-pill d-flex align-items-center gap-1">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Toplam İhbar: <strong class="ms-1">{{ incidents|length }}</strong>
+            </span>
+            <span class="badge bg-info text-dark px-3 py-2 rounded-pill d-flex align-items-center gap-1">
+                <i class="bi bi-geo-alt-fill"></i>
+                Simülasyon Alanı: Kızılay / Çankaya
+            </span>
+            <span class="badge bg-success px-3 py-2 rounded-pill d-flex align-items-center gap-1">
+                <i class="bi bi-cpu-fill"></i>
+                Sistem: Aktif
+            </span>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.new_incident') }}" class="btn btn-primary btn-sm px-3 py-2 ms-md-2 rounded-pill d-flex align-items-center gap-1">
+                    <i class="bi bi-plus-lg"></i> Yeni Olay Bildir
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Grid Layout -->
+    <div class="row g-4">
+        <!-- Left Incident List Column (col-lg-4) -->
+        <div class="col-lg-4">
+            <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-list-stars me-2 text-info"></i>Son İhbarlar</span>
+                <small class="text-muted">Tıklayıp Haritada Odaklanın</small>
+            </div>
+            
+            <div class="scrollable-incident-list">
+                {% for incident in incidents %}
+                    {% if incident.category in ['Asayiş', 'Hırsızlık', 'Saldırı', 'Gasp'] %}
+                        {% set border_color = 'danger' %}
+                    {% elif incident.category in ['Trafik', 'Kaza', 'Yol Kapanması'] %}
+                        {% set border_color = 'warning' %}
+                    {% elif incident.category in ['Şüpheli Durum', 'Kayıp'] %}
+                        {% set border_color = 'info' %}
+                    {% else %}
+                        {% set border_color = 'success' %}
+                    {% endif %}
+                    
+                    <div class="card incident-card mb-3 border-start border-{{ border_color }} border-4" 
+                         onclick="focusIncident({{ loop.index0 }}, {{ incident.latitude }}, {{ incident.longitude }})">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h3 class="incident-card-title mb-0">{{ incident.title }}</h3>
+                                <span class="badge bg-{{ border_color }} ms-2">{{ incident.category }}</span>
+                            </div>
+                            <p class="incident-card-desc mb-2">{{ incident.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem;">
+                                <span><i class="bi bi-geo-alt me-1"></i>{{ incident.neighborhood_name }}</span>
+                                <span><i class="bi bi-clock me-1"></i>{{ incident.created_at.strftime('%d.%m %H:%M') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-clipboard-x display-4 mb-3 d-block text-secondary"></i>
+                        Henüz bildirilmiş bir olay simülasyonu bulunmamaktadır.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Map Column (col-lg-8) -->
+        <div class="col-lg-8">
+            <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-map-fill me-2 text-info"></i>Çankaya Taktik Haritası</span>
+                <small class="text-muted">Kilitli Sınır Simülasyonu</small>
+            </div>
+            
+            <div class="map-wrapper">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Island for Incidents -->
     <script id="incidents-data" type="application/json">
         [
             {% for incident in incidents %}
@@ -45,21 +213,62 @@
         ]
     </script>
 
+    <!-- Map Script -->
     <script>
-        var map = L.map('map').setView([39.92077, 32.85411], 6);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Bounds for Kızılay / Çankaya Ankara focus
+        const southWest = L.latLng(39.8800, 32.8000);
+        const northEast = L.latLng(39.9500, 32.8800);
+        const bounds = L.latLngBounds(southWest, northEast);
+
+        const map = L.map('map', {
+            center: [39.9207, 32.8541], // Ankara Merkez / Çankaya
+            zoom: 14,
+            minZoom: 13,
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0 // Fully blocks user from moving outside boundaries
+        });
+
+        // Premium CartoDB Dark Matter tiles matching the application dark mode
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(map);
 
         const incidentsData = JSON.parse(document.getElementById('incidents-data').textContent);
-        incidentsData.forEach(incident => {
+        const markers = {};
+
+        incidentsData.forEach((incident, index) => {
             if (incident.latitude && incident.longitude && incident.latitude !== "None" && incident.longitude !== "None") {
                 var lat = parseFloat(incident.latitude);
                 var lng = parseFloat(incident.longitude);
                 var marker = L.marker([lat, lng]).addTo(map);
-                marker.bindPopup(`<b>${incident.title}</b><br>Kategori: ${incident.category}<br>${incident.description}`);
+                marker.bindPopup(`
+                    <div style="font-family: 'Roboto', sans-serif; min-width: 180px;">
+                        <h6 style="margin-bottom: 5px; font-weight: 700; color: #fff;">${incident.title}</h6>
+                        <span style="font-size: 0.75rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: #38bdf8; color: #0f172a; display: inline-block; margin-bottom: 8px;">${incident.category}</span>
+                        <p style="margin: 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">${incident.description}</p>
+                    </div>
+                `);
+                markers[index] = marker;
             }
         });
+
+        // Click handler to pan and center the map on an incident
+        function focusIncident(index, lat, lng) {
+            if (lat && lng && lat !== "None" && lng !== "None") {
+                const targetLat = parseFloat(lat);
+                const targetLng = parseFloat(lng);
+                map.setView([targetLat, targetLng], 16, {
+                    animate: true,
+                    duration: 1.0
+                });
+                
+                if (markers[index]) {
+                    setTimeout(() => {
+                        markers[index].openPopup();
+                    }, 500);
+                }
+            }
+        }
     </script>
 {% endblock %}

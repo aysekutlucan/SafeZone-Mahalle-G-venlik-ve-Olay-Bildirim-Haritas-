@@ -85,3 +85,13 @@
 2. **Güvenli Token Oluşturma ve Doğrulama (itsdangerous):** `app/models.py` içindeki `User` modeline Flask'ın güvenli serializer mimarisini (`itsdangerous.URLSafeTimedSerializer`) kullanan `get_reset_password_token` ve `verify_reset_password_token` metotları eklenerek güvenli, süreli şifre sıfırlama token yapısı entegre edildi.
 3. **Şifre Sıfırlama Rotaları ve Geliştirici Modu:** `app/auth/routes.py` içine `/reset_password_request` ve `/reset_password/<token>` rotaları eklendi. Geliştirici dostu simülasyon ortamında linkin terminale (`print()`) basılması ve arayüzde Türkçe bilgilendirici flash mesaj gösterilmesi sağlandı.
 4. **Şifre Sıfırlama Arayüz Şablonları:** `app/templates/auth/login.html` sayfasına şık bir "Şifremi Unuttum" bağlantısı eklendi. Kurumsal koyu lacivert temamıza uygun `reset_password_request.html` ve `reset_password.html` form sayfaları tasarlanıp oluşturuldu.
+
+## AI Geliştirme Günlüğü - Oturum 9
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **CSS Variables (:root) ile Çift Tema Yapısı:** `app/templates/base.html` içerisine açık (krem `#fdfbf7` & toz pembe `#db7093`) ve koyu (derin siyah `#0a0a0a` & su yeşili `#00fa9a`) temaları yöneten kapsamlı bir `:root` CSS değişken yapısı eklendi.
+2. **Navbar Tema Değiştirme Butonu:** Üst navigasyon barının sağ kısmına şık bir Güneş/Ay (`bi-sun-fill`/`bi-moon-stars-fill`) ikonu olan dinamik bir tema seçici butonu yerleştirildi.
+3. **JS LocalStorage ve Tema Senkronizasyonu:** Kullanıcının seçtiği temanın tarayıcı hafızasında saklanması (`localStorage`) ve sayfa geçişlerinde ekranın anlık titremesini engellemek için `<head>` içine anlık tema yükleme scripti entegre edildi.
+4. **Dinamik Coğrafi Harita Katmanı Değişimi:** Tema toggled olduğunda tetiklenen özel `themeChanged` JS olayı sayesinde, Leaflet harita katmanının CartoDB Voyager (Açık) ve CartoDB Dark Matter (Koyu) harita görselleriyle anında ve pürüzsüzce yer değiştirmesi sağlandı. Harita marker popup balonları ve diğer tüm bileşenler değişkenlere bağlanarak mükemmel renk uyumu elde edildi.

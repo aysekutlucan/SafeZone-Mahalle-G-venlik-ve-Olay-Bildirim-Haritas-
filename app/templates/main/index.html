@@ -8,11 +8,12 @@
     <style>
         /* Simulation Banner */
         .simulation-banner {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-left: 5px solid #38bdf8; /* Sleek cyber blue border */
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-left: 5px solid var(--accent-color); /* Sleek dynamic theme border */
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         /* Pulse animation for active simulation */
@@ -27,9 +28,10 @@
         /* Incident List Styles */
         .incident-list-header {
             font-weight: 700;
-            color: #cbd5e1;
-            border-bottom: 2px solid #334155;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--card-border);
             padding-bottom: 0.5rem;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         .scrollable-incident-list {
@@ -43,54 +45,59 @@
             width: 6px;
         }
         .scrollable-incident-list::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: var(--bg-color);
+            transition: background-color 0.3s ease;
         }
         .scrollable-incident-list::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: var(--card-border);
             border-radius: 3px;
+            transition: background-color 0.3s ease;
         }
         .scrollable-incident-list::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: var(--text-muted);
         }
 
         /* Incident Card Styles */
         .incident-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 8px;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
         .incident-card:hover {
-            background-color: #24324a;
+            background-color: var(--navbar-bg);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            border-color: #38bdf8;
+            box-shadow: 0 6px 20px var(--accent-glow);
+            border-color: var(--accent-color);
         }
 
         .incident-card-title {
             font-size: 1.05rem;
             font-weight: 600;
-            color: #f8fafc;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
 
         .incident-card-desc {
             font-size: 0.9rem;
-            color: #cbd5e1;
+            color: var(--text-muted);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: color 0.3s ease;
         }
 
         /* Map Container Styles */
         .map-wrapper {
-            border: 1px solid #334155;
+            border: 1px solid var(--card-border);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
         }
 
         #map {
@@ -99,15 +106,16 @@
             z-index: 1;
         }
 
-        /* Dark Leaflet Popup Styling */
+        /* Dynamic Leaflet Popup Styling */
         .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-            background: #1e293b !important;
-            color: #f8fafc !important;
-            border: 1px solid #334155;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+            background: var(--card-bg) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .leaflet-popup-close-button {
-            color: #cbd5e1 !important;
+            color: var(--text-muted) !important;
         }
 
         /* Custom Pagination Styling */
@@ -116,38 +124,38 @@
             margin-bottom: 0.5rem;
         }
         .custom-pagination .page-link {
-            background-color: #1e293b;
-            border-color: #334155;
-            color: #cbd5e1;
+            background-color: var(--card-bg);
+            border-color: var(--card-border);
+            color: var(--text-color);
             padding: 0.4rem 0.85rem;
             transition: all 0.2s ease;
         }
         .custom-pagination .page-link:hover {
-            background-color: #24324a;
-            border-color: #38bdf8;
-            color: #38bdf8;
+            background-color: var(--navbar-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
         .custom-pagination .page-item.active .page-link {
-            background-color: #38bdf8;
-            border-color: #38bdf8;
-            color: #0f172a;
+            background-color: var(--accent-color) !important;
+            border-color: var(--accent-color) !important;
+            color: var(--btn-primary-text) !important;
             font-weight: 700;
         }
         .custom-pagination .page-item.disabled .page-link {
-            background-color: #0f172a;
-            border-color: #1e293b;
-            color: #475569;
+            background-color: var(--bg-color);
+            border-color: var(--card-border);
+            color: var(--text-muted);
         }
     </style>
 
     <!-- Upper Welcome Banner -->
     <div class="simulation-banner p-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <div>
-            <h1 class="h3 mb-2 text-white fw-bold d-flex align-items-center gap-2">
-                <i class="bi bi-broadcast text-danger animate-pulse"></i>
+            <h1 class="h3 mb-2 text-white fw-bold d-flex align-items-center gap-2" style="color: var(--text-color) !important;">
+                <i class="bi bi-broadcast text-danger animate-pulse" style="color: var(--accent-color) !important;"></i>
                 SafeZone: Çankaya Bölgesi Güvenlik Simülasyon Paneli
             </h1>
-            <p class="text-muted mb-0">Ankara Kızılay ve Çankaya bölgesi olay izleme ve anlık simülasyon konsolu.</p>
+            <p class="text-muted mb-0" style="color: var(--text-muted) !important;">Ankara Kızılay ve Çankaya bölgesi olay izleme ve anlık simülasyon konsolu.</p>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2">
             <span class="badge bg-primary px-3 py-2 rounded-pill d-flex align-items-center gap-1">
@@ -175,7 +183,7 @@
         <!-- Left Incident List Column (col-lg-4) -->
         <div class="col-lg-4">
             <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-list-stars me-2 text-info"></i>Son İhbarlar</span>
+                <span><i class="bi bi-list-stars me-2 text-info" style="color: var(--accent-color) !important;"></i>Son İhbarlar</span>
                 <small class="text-muted">Tıklayıp Haritada Odaklanın</small>
             </div>
             
@@ -199,7 +207,7 @@
                                 <span class="badge bg-{{ border_color }} ms-2">{{ incident.category }}</span>
                             </div>
                             <p class="incident-card-desc mb-2">{{ incident.description }}</p>
-                            <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem;">
+                            <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem; color: var(--text-muted) !important;">
                                 <span><i class="bi bi-geo-alt me-1"></i>{{ incident.neighborhood_name }}</span>
                                 <span><i class="bi bi-clock me-1"></i>{{ incident.created_at.strftime('%d.%m %H:%M') }}</span>
                             </div>
@@ -251,7 +259,7 @@
         <!-- Right Map Column (col-lg-8) -->
         <div class="col-lg-8">
             <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-map-fill me-2 text-info"></i>Çankaya Taktik Haritası</span>
+                <span><i class="bi bi-map-fill me-2 text-info" style="color: var(--accent-color) !important;"></i>Çankaya Taktik Haritası</span>
                 <small class="text-muted">Kilitli Sınır Simülasyonu</small>
             </div>
             
@@ -292,11 +300,33 @@
             maxBoundsViscosity: 1.0 // Fully blocks user from moving outside boundaries
         });
 
-        // Premium CartoDB Dark Matter tiles matching the application dark mode
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        }).addTo(map);
+        // Dynamic map style layer switcher based on active theme
+        let tileLayer;
+
+        function setMapTiles(theme) {
+            if (tileLayer) {
+                map.removeLayer(tileLayer);
+            }
+            
+            const tileUrl = theme === 'light'
+                ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' // Premium light theme map tiles
+                : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'; // Deep dark theme map tiles
+
+            tileLayer = L.tileLayer(tileUrl, {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            }).addTo(map);
+        }
+
+        // Initialize tile layer
+        const initialTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        setMapTiles(initialTheme);
+
+        // Listen for themeChanged event to swap tile layer instantly
+        window.addEventListener('themeChanged', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            setMapTiles(currentTheme);
+        });
 
         const incidentsData = JSON.parse(document.getElementById('incidents-data').textContent);
         const markers = {};
@@ -308,9 +338,9 @@
                 var marker = L.marker([lat, lng]).addTo(map);
                 marker.bindPopup(`
                     <div style="font-family: 'Roboto', sans-serif; min-width: 180px;">
-                        <h6 style="margin-bottom: 5px; font-weight: 700; color: #fff;">${incident.title}</h6>
-                        <span style="font-size: 0.75rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: #38bdf8; color: #0f172a; display: inline-block; margin-bottom: 8px;">${incident.category}</span>
-                        <p style="margin: 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">${incident.description}</p>
+                        <h6 style="margin-bottom: 5px; font-weight: 700; color: var(--text-color);">${incident.title}</h6>
+                        <span style="font-size: 0.75rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: var(--accent-color); color: var(--btn-primary-text); display: inline-block; margin-bottom: 8px;">${incident.category}</span>
+                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${incident.description}</p>
                     </div>
                 `);
                 markers[incident.id] = marker;

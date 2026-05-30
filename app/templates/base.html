@@ -10,37 +10,96 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Fonts for serious typography -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Immediately set the theme on head load to prevent flashing of unstyled content
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
     <style>
+        :root {
+            /* Default: Dark Theme (Derin Siyah & Neon Su Yeşili) */
+            --bg-color: #0a0a0a;
+            --text-color: #f4f4f5;
+            --text-muted: #a1a1aa;
+            
+            --accent-color: #00fa9a; /* Su Yeşili / Spring Green */
+            --accent-hover: #20b2aa; /* Light Sea Green */
+            --accent-glow: rgba(0, 250, 154, 0.25);
+            
+            --card-bg: #121212;
+            --card-border: #27272a;
+            --navbar-bg: #121212;
+            --navbar-border: #27272a;
+            
+            --input-bg: #000000;
+            --input-border: #27272a;
+            
+            --btn-primary-bg: #20b2aa;
+            --btn-primary-text: #0a0a0a;
+            
+            --alert-bg: #18181b;
+            --alert-border: #20b2aa;
+        }
+
+        [data-theme="light"] {
+            /* Light Theme (Krem & Toz Pembe) */
+            --bg-color: #fdfbf7; /* Yumuşak krem */
+            --text-color: #2d1b10; /* Koyu kahve/siyah */
+            --text-muted: #78716c;
+            
+            --accent-color: #db7093; /* Premium Toz Pembe / Pale Violet Red */
+            --accent-hover: #c71585; /* Medium Violet Red */
+            --accent-glow: rgba(219, 112, 147, 0.25);
+            
+            --card-bg: #ffffff;
+            --card-border: #f1f0ea;
+            --navbar-bg: #f9f6f0;
+            --navbar-border: #eaddd3;
+            
+            --input-bg: #ffffff;
+            --input-border: #cbd5e1;
+            
+            --btn-primary-bg: #db7093;
+            --btn-primary-text: #ffffff;
+            
+            --alert-bg: #fff5f5;
+            --alert-border: #db7093;
+        }
+
         body {
-            background-color: #0f172a; /* Corporate deep navy */
-            color: #f8fafc; /* Crisp light gray/white for contrast */
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         /* Navbar Institutional Styling */
         .navbar-institutional {
-            background-color: #1e293b !important; /* Slightly lighter navy for contrast */
-            border-bottom: 1px solid #334155; /* Subtle elitist gray border */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            background-color: var(--navbar-bg) !important;
+            border-bottom: 1px solid var(--navbar-border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .navbar-institutional .navbar-brand {
-            color: #f8fafc !important;
+            color: var(--text-color) !important;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
         
         .navbar-institutional .nav-link {
-            color: #cbd5e1 !important;
+            color: var(--text-muted) !important;
             font-weight: 500;
             transition: color 0.2s ease;
         }
         
         .navbar-institutional .nav-link:hover {
-            color: #38bdf8 !important; /* Soft, professional blue on hover */
+            color: var(--accent-color) !important;
         }
         
         .main-content {
@@ -48,17 +107,76 @@
         }
 
         .footer-minimal {
-            border-top: 1px solid #334155;
-            color: #94a3b8;
+            border-top: 1px solid var(--navbar-border);
+            color: var(--text-muted);
             font-size: 0.85rem;
+            transition: border-color 0.3s ease, color 0.3s ease;
         }
         
         /* Flash message customization */
         .alert-custom {
-            background-color: #1e293b;
-            color: #e2e8f0;
-            border: 1px solid #3b82f6; /* Blue border for alerts */
-            border-left: 4px solid #3b82f6; /* Corporate touch */
+            background-color: var(--alert-bg);
+            color: var(--text-color);
+            border: 1px solid var(--alert-border);
+            border-left: 4px solid var(--alert-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Generic CSS variables implementation to automatically override custom components */
+        .card {
+            background-color: var(--card-bg) !important;
+            border-color: var(--card-border) !important;
+            color: var(--text-color) !important;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+        }
+
+        .form-control {
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+            border-color: var(--input-border) !important;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 0.25rem var(--accent-glow) !important;
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--btn-primary-bg) !important;
+            border-color: var(--btn-primary-bg) !important;
+            color: var(--btn-primary-text) !important;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover) !important;
+            border-color: var(--accent-hover) !important;
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        /* Theme Toggle Button Style */
+        .theme-toggle-btn {
+            background: none;
+            border: 1px solid var(--navbar-border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.85rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            background-color: var(--accent-glow);
         }
     </style>
 </head>
@@ -67,7 +185,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-institutional py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
-                <i class="bi bi-shield-lock-fill text-primary"></i>
+                <i class="bi bi-shield-lock-fill text-primary" style="color: var(--accent-color) !important;"></i>
                 SafeZone
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -82,7 +200,14 @@
                         <a class="nav-link" href="#">İhbar Bildir</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                    <!-- Theme Toggle Switch -->
+                    <li class="nav-item me-lg-2 my-2 my-lg-0">
+                        <button id="theme-toggle" class="theme-toggle-btn">
+                            <i id="theme-toggle-icon" class="bi bi-moon-stars-fill"></i>
+                            <span id="theme-toggle-text">Koyu</span>
+                        </button>
+                    </li>
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.profile') }}">Profil</a>
@@ -111,7 +236,7 @@
                 {% for category, message in messages %}
                     <div class="alert alert-custom alert-dismissible fade show" role="alert">
                         <strong>{{ category|capitalize }}:</strong> {{ message }}
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="filter: invert(var(--theme-invert-val, 0));"></button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -130,5 +255,40 @@
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Theme Logic Script -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleIcon = document.getElementById('theme-toggle-icon');
+        const themeToggleText = document.getElementById('theme-toggle-text');
+
+        function updateThemeUI(theme) {
+            if (theme === 'light') {
+                themeToggleIcon.className = 'bi bi-sun-fill text-warning';
+                themeToggleText.textContent = 'Açık';
+                document.documentElement.style.setProperty('--theme-invert-val', '1');
+            } else {
+                themeToggleIcon.className = 'bi bi-moon-stars-fill text-info';
+                themeToggleText.textContent = 'Koyu';
+                document.documentElement.style.setProperty('--theme-invert-val', '0');
+            }
+        }
+
+        // Initialize UI based on active theme
+        const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        updateThemeUI(activeTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeUI(newTheme);
+
+            // Dispatch global event for interactive child scripts (like Leaflet tiles swap!)
+            window.dispatchEvent(new Event('themeChanged'));
+        });
+    </script>
 </body>
 </html>

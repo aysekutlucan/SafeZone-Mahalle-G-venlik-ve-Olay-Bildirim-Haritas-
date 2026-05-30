@@ -132,10 +132,10 @@
             <div class="console-header mb-4 d-flex justify-content-between align-items-center">
                 <h2 class="h3 mb-0 d-flex align-items-center gap-2">
                     <i class="bi bi-shield-plus text-primary" style="color: var(--accent-color) !important;"></i>
-                    Yeni Olay Bildir
-                    <i class="bi bi-cat-fill glowing-cat-header" title="SafeZone Tetikte Olan Bekçi Kedisi"></i>
+                    {{ _('Yeni Olay Bildir') }}
+                    <i class="bi bi-cat-fill glowing-cat-header" title="{{ _('SafeZone Uyuyan Bekçi Kedisi') }}"></i>
                 </h2>
-                <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">İptal Et</a>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">{{ _('İptal Et') }}</a>
             </div>
 
             <form method="POST" action="">
@@ -144,23 +144,23 @@
                 <!-- Sınır İhlali Hata Alert -->
                 <div id="boundary-alert" class="alert alert-danger d-none mb-4 animate-pulse" style="border-left: 5px solid #ff3366; background-color: var(--card-bg); border-color: var(--card-border); color: #ff3366; box-shadow: 0 4px 15px rgba(255, 51, 102, 0.15);">
                     <i class="bi bi-exclamation-octagon-fill me-2"></i>
-                    <strong>Sınır İhlali:</strong> Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!
+                    <strong>{{ _('boundary_violation_title') }}</strong> {{ _('boundary_violation_text') }}
                 </div>
 
                 <div class="row g-4">
                     <!-- Left Form Panel (col-lg-6) -->
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            {{ form.title.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                            {{ form.title(class="form-control bg-dark text-white border-secondary", placeholder="Olay başlığını girin") }}
+                            <label class="form-label text-light fw-medium" style="color: var(--text-color) !important;">{{ _('Olay Başlığı') }}</label>
+                            {{ form.title(class="form-control bg-dark text-white border-secondary", placeholder=_('Olay başlığını girin')) }}
                             {% for error in form.title.errors %}
                                 <div class="text-danger small mt-1">[{{ error }}]</div>
                             {% endfor %}
                         </div>
 
                         <div class="mb-3">
-                            {{ form.description.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                            {{ form.description(class="form-control bg-dark text-white border-secondary", rows="4", placeholder="Olay detaylarını açıklayın") }}
+                            <label class="form-label text-light fw-medium" style="color: var(--text-color) !important;">{{ _('Olay Detayları') }}</label>
+                            {{ form.description(class="form-control bg-dark text-white border-secondary", rows="4", placeholder=_('Olay detaylarını açıklayın')) }}
                             {% for error in form.description.errors %}
                                 <div class="text-danger small mt-1">[{{ error }}]</div>
                             {% endfor %}
@@ -168,15 +168,20 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                {{ form.category.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                {{ form.category(class="form-select form-control") }}
+                                <label class="form-label text-light fw-medium" style="color: var(--text-color) !important;">{{ _('Kategori') }}</label>
+                                <select id="category" name="category" class="form-select form-control" required="required">
+                                    <option value="supheli" {% if form.category.data == 'supheli' %}selected{% endif %}>{{ _('Şüpheli Durum') }}</option>
+                                    <option value="hirsizlik" {% if form.category.data == 'hirsizlik' %}selected{% endif %}>{{ _('Hırsızlık') }}</option>
+                                    <option value="kaza" {% if form.category.data == 'kaza' %}selected{% endif %}>{{ _('Kaza') }}</option>
+                                    <option value="diger" {% if form.category.data == 'diger' %}selected{% endif %}>{{ _('Diğer') }}</option>
+                                </select>
                                 {% for error in form.category.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
                             </div>
                             <div class="col-md-6">
-                                {{ form.neighborhood_name.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                {{ form.neighborhood_name(class="form-control", placeholder="Örn: Kızılay, Bahçelievler...", required="required", id="neighborhood_name") }}
+                                <label class="form-label text-light fw-medium" style="color: var(--text-color) !important;">{{ _('Mahalle Adı') }}</label>
+                                {{ form.neighborhood_name(class="form-control", placeholder=_('Örn: Kızılay, Bahçelievler...'), required="required", id="neighborhood_name") }}
                                 {% for error in form.neighborhood_name.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
@@ -186,15 +191,15 @@
                         <!-- Readonly Coords Fields -->
                         <div class="row mb-4">
                             <div class="col-md-6">
-                                {{ form.latitude.label(class="form-label text-muted fw-medium small") }}
-                                {{ form.latitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder="Haritadan seçiniz") }}
+                                <label class="form-label text-muted fw-medium small">{{ _('Koordinat Enlemi (Latitude)') }}</label>
+                                {{ form.latitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder=_('Haritadan seçiniz')) }}
                                 {% for error in form.latitude.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
                             </div>
                             <div class="col-md-6">
-                                {{ form.longitude.label(class="form-label text-muted fw-medium small") }}
-                                {{ form.longitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder="Haritadan seçiniz") }}
+                                <label class="form-label text-muted fw-medium small">{{ _('Koordinat Boylamı (Longitude)') }}</label>
+                                {{ form.longitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder=_('Haritadan seçiniz')) }}
                                 {% for error in form.longitude.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
@@ -202,7 +207,7 @@
                         </div>
 
                         <div class="d-grid mt-4">
-                            {{ form.submit(class="btn btn-primary btn-lg rounded-pill fw-bold py-2 shadow-sm") }}
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold py-2 shadow-sm w-100">{{ _('Olay Bildir') }}</button>
                         </div>
                     </div>
 
@@ -211,9 +216,9 @@
                         <div class="mb-2 d-flex justify-content-between align-items-center">
                             <label class="form-label text-light fw-medium mb-0" style="color: var(--text-color) !important;">
                                 <i class="bi bi-map me-1 text-info" style="color: var(--accent-color) !important;"></i>
-                                İhbar Konumunu Seçin
+                                {{ _('İhbar Konumunu Seçin') }}
                             </label>
-                            <small class="text-muted">Haritada ihbar noktasına bir kez tıklayın</small>
+                            <small class="text-muted">{% if active_lang == 'en' %}Click once on the map to set the incident location{% else %}Haritada ihbar noktasına bir kez tıklayın{% endif %}</small>
                         </div>
                         <div id="map"></div>
                     </div>

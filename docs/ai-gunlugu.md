@@ -169,3 +169,14 @@
 ### Yapılan İşlemler:
 1. **Akıllı Metin Girdili Mahalle Seçimi (select -> input):** `create_incident.html` sayfasındaki Mahalle Adı açılır menüsü (`select`) tamamen kaldırılarak yerine klavyeden serbestçe yazılabilir, koyu/açık temayla tam uyumlu standart bir `<input type="text">` alanı yerleştirildi.
 2. **JavaScript Dinamik Coğrafi Akıllı Eşleştirme:** Kullanıcının bu alana yazı yazarken veya odaktan çıktığında (`oninput`/`onblur`) çalışacak bir JS mekanizması geliştirildi. Girilen metin Türkçe karakter duyarsız veya küçük harfe çevrilerek analiz edilir; eğer 'kızılay', 'bahçeli', 'tunalı', 'anıttepe' veya 'maltepe' ifadelerini içeriyorsa harita anında o mahallenin koordinatlarına pürüzsüzce uçar (`map.flyTo`), koordinat alanlarını (readonly) otomatik doldurur ve haritada yeşil konum marker'ını günceller.
+
+## AI Geliştirme Günlüğü - Oturum 17
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Çoklu Dil Desteği (TR/EN Localization) Altyapısı:** Uygulamaya tam uyumlu, dinamik bir dil desteği entegre edildi. Dil verilerini Türkçe ve İngilizce karşılıklarıyla (Navbar linkleri, ihbar formları, simülasyon butonu, sınır uyarısı, oyun metinleri vb.) yöneten `app/main/translations.py` modülü sıfırdan oluşturuldu.
+2. **Dil Değiştirme Rotası ve Küresel Jinja2 Context Processor:** `app/main/routes.py` dosyasına, kullanıcının dil tercihini `session['lang']` üzerinde saklayan `/set_language/<lang>` rotası eklendi. Tüm şablonların ek işleme gerek kalmadan dil verilerini tüketebilmesi için `@main_bp.app_context_processor` dekoratörü tanımlanarak `_` çeviri fonksiyonu ve seçili dil değişkeni küresel hale getirildi (Varsayılan: Türkçe - `tr`).
+3. **Arayüz Entegrasyonları (Jinja2 & HTML/JS Güncellemeleri):**
+   - `base.html` navigasyon barına şık ve kurumsal bir dil değiştirme butonu ("TR" veya "EN") eklendi.
+   - `base.html`, `index.html`, `create_incident.html` ve `404.html` şablonlarındaki tüm kritik başlık, etiket, buton, uyarı metinleri ve mini DX-Ball oyun içi durum mesajları dinamik çeviri yapısına bağlandı.

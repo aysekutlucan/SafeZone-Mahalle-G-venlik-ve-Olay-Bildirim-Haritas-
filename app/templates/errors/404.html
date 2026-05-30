@@ -40,10 +40,14 @@
         <div class="error-icon animate-float">
             <i class="bi bi-shield-exclamation" style="color: var(--accent-color) !important;"></i>
         </div>
-        <h1 class="display-6 fw-bold text-white mb-2" style="color: var(--text-color) !important;">Sınır İhlali</h1>
-        <h2 class="h6 text-muted mb-3">Hata Kodu: 404 - Sayfa Bulunamadı</h2>
+        <h1 class="display-6 fw-bold text-white mb-2" style="color: var(--text-color) !important;">{{ _('Sınır İhlali') }}</h1>
+        <h2 class="h6 text-muted mb-3">{% if active_lang == 'en' %}Error Code: 404 - Page Not Found{% else %}Hata Kodu: 404 - Sayfa Bulunamadı{% endif %}</h2>
         <p class="text-secondary mb-4 small" style="line-height: 1.5; color: var(--text-muted) !important;">
+            {% if active_lang == 'en' %}
+            The secure zone coordinates you are looking for were not found in the SafeZone database. Please return to the locked simulation area or **break the obstacles (bricks) below to restore the connection!**
+            {% else %}
             Aradığınız güvenli bölge koordinatları SafeZone veri tabanında bulunamadı. Lütfen kilitli simülasyon alanına geri dönün veya **aşağıdaki engelleri (tuğlaları) kırarak sınır ihlali bağlantısını onarın!**
+            {% endif %}
         </p>
 
         <!-- HTML5 Canvas for DX-Ball Game -->
@@ -54,7 +58,7 @@
         <div class="d-grid">
             <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
                 <i class="bi bi-shield-check-fill text-dark" style="color: var(--btn-primary-text) !important;"></i>
-                Güvenli Bölgeye Dön (Ana Sayfa)
+                {{ _('Güvenli Bölgeye Dön') }}
             </a>
         </div>
     </div>
@@ -194,7 +198,8 @@
     function drawStatus() {
         ctx.font = "bold 11px 'Roboto', sans-serif";
         ctx.fillStyle = getThemeColor('--text-muted') || '#cbd5e1';
-        ctx.fillText("Engeller: " + (brickRowCount * brickColumnCount - score), 15, 18);
+        const isEn = '{{ active_lang }}' === 'en';
+        ctx.fillText((isEn ? "Bricks: " : "Engeller: ") + (brickRowCount * brickColumnCount - score), 15, 18);
     }
     
     // End Game and auto redirect
@@ -205,17 +210,18 @@
         ctx.font = "bold 18px 'Roboto', sans-serif";
         ctx.textAlign = "center";
         
+        const isEn = '{{ active_lang }}' === 'en';
         if (isWin) {
             ctx.fillStyle = '#00fa9a'; // Success green
-            ctx.fillText("Tebrikler! Sınır İhlali Onarıldı", canvas.width / 2, canvas.height / 2 - 10);
+            ctx.fillText(isEn ? "Congratulations! Connection Restored" : "Tebrikler! Sınır İhlali Onarıldı", canvas.width / 2, canvas.height / 2 - 10);
         } else {
             ctx.fillStyle = '#ff3366'; // Danger red
-            ctx.fillText("Bağlantı Kesildi (Game Over)", canvas.width / 2, canvas.height / 2 - 10);
+            ctx.fillText(isEn ? "Connection Lost (Game Over)" : "Bağlantı Kesildi (Game Over)", canvas.width / 2, canvas.height / 2 - 10);
         }
         
         ctx.font = "12px 'Roboto', sans-serif";
         ctx.fillStyle = getThemeColor('--text-muted') || '#cbd5e1';
-        ctx.fillText("3 saniye içinde güvenli bölgeye aktarılıyorsunuz...", canvas.width / 2, canvas.height / 2 + 20);
+        ctx.fillText(isEn ? "Redirecting to secure zone in 3 seconds..." : "3 saniye içinde güvenli bölgeye aktarılıyorsunuz...", canvas.width / 2, canvas.height / 2 + 20);
         
         setTimeout(() => {
             window.location.href = "{{ url_for('main.index') }}";

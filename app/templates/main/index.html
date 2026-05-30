@@ -221,26 +221,26 @@
         <div>
             <h1 class="h3 mb-2 text-white fw-bold d-flex align-items-center gap-2" style="color: var(--text-color) !important;">
                 <i class="bi bi-broadcast text-danger animate-pulse" style="color: var(--accent-color) !important;"></i>
-                SafeZone: Çankaya Bölgesi Güvenlik Simülasyon Paneli
+                {{ _('system_title') }}
             </h1>
-            <p class="text-muted mb-0" style="color: var(--text-muted) !important;">Ankara Kızılay ve Çankaya bölgesi olay izleme ve anlık simülasyon konsolu.</p>
+            <p class="text-muted mb-0" style="color: var(--text-muted) !important;">{% if active_lang == 'en' %}Ankara Kizilay and Cankaya region event monitoring and instant simulation console.{% else %}Ankara Kızılay ve Çankaya bölgesi olay izleme ve anlık simülasyon konsolu.{% endif %}</p>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2">
             <span class="badge bg-primary px-3 py-2 rounded-pill d-flex align-items-center gap-1">
                 <i class="bi bi-exclamation-triangle-fill"></i>
-                Toplam İhbar: <strong class="ms-1">{{ all_incidents|length }}</strong>
+                {{ _('Toplam İhbar') }}: <strong class="ms-1">{{ all_incidents|length }}</strong>
             </span>
             <span class="badge bg-info text-dark px-3 py-2 rounded-pill d-flex align-items-center gap-1">
                 <i class="bi bi-geo-alt-fill"></i>
-                Simülasyon Alanı: Kızılay / Çankaya
+                {% if active_lang == 'en' %}Simulation Area: Kizilay / Cankaya{% else %}Simülasyon Alanı: Kızılay / Çankaya{% endif %}
             </span>
             <span class="badge bg-success px-3 py-2 rounded-pill d-flex align-items-center gap-1">
                 <i class="bi bi-cpu-fill"></i>
-                Sistem: Aktif
+                {% if active_lang == 'en' %}System: Active{% else %}Sistem: Aktif{% endif %}
             </span>
             {% if current_user.is_authenticated %}
                 <a href="{{ url_for('main.new_incident') }}" class="btn btn-primary btn-sm px-3 py-2 ms-md-2 rounded-pill d-flex align-items-center gap-1">
-                    <i class="bi bi-plus-lg"></i> Yeni Olay Bildir
+                    <i class="bi bi-plus-lg"></i> {{ _('Yeni Olay Bildir') }}
                 </a>
             {% endif %}
         </div>
@@ -251,15 +251,15 @@
         <!-- Left Incident List Column (col-lg-4) -->
         <div class="col-lg-4">
             <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-list-stars me-2 text-info" style="color: var(--accent-color) !important;"></i>Son İhbarlar</span>
-                <small class="text-muted">Tıklayıp Haritada Odaklanın</small>
+                <span><i class="bi bi-list-stars me-2 text-info" style="color: var(--accent-color) !important;"></i>{{ _('Mahalle İhbar Listesi') }}</span>
+                <small class="text-muted">{% if active_lang == 'en' %}Click to Focus on Map{% else %}Tıklayıp Haritada Odaklanın{% endif %}</small>
             </div>
 
             {% if current_user.is_authenticated %}
                 <div class="d-grid mb-3">
                     <button id="trigger-simulation-btn" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 rounded-pill py-2 shadow-sm fw-bold">
                         <i class="bi bi-alarm-fill text-danger animate-pulse" style="color: var(--btn-primary-text) !important;"></i>
-                        🚨 Simülasyon İhbarı Tetikle
+                        {{ _('🚨 Simülasyon İhbarı Tetikle') }}
                     </button>
                 </div>
             {% endif %}
@@ -281,7 +281,7 @@
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h3 class="incident-card-title mb-0">{{ incident.title }}</h3>
-                                <span class="badge bg-{{ border_color }} ms-2">{{ incident.category }}</span>
+                                <span class="badge bg-{{ border_color }} ms-2">{{ _(incident.category) }}</span>
                             </div>
                             <p class="incident-card-desc mb-2">{{ incident.description }}</p>
                             <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem; color: var(--text-muted) !important;">
@@ -293,7 +293,7 @@
                 {% else %}
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-clipboard-x display-4 mb-3 d-block text-secondary"></i>
-                        Henüz bildirilmiş bir olay simülasyonu bulunmamaktadır.
+                        {{ _('Gösterilecek ihbar bulunmuyor.') }}
                     </div>
                 {% endfor %}
             </div>
@@ -336,8 +336,8 @@
         <!-- Right Map Column (col-lg-8) -->
         <div class="col-lg-8">
             <div class="incident-list-header mb-3 d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-map-fill me-2 text-info" style="color: var(--accent-color) !important;"></i>Çankaya Taktik Haritası</span>
-                <small class="text-muted">Kilitli Sınır Simülasyonu</small>
+                <span><i class="bi bi-map-fill me-2 text-info" style="color: var(--accent-color) !important;"></i>{{ _('Çankaya Taktiksel Durum Haritası') }}</span>
+                <small class="text-muted">{% if active_lang == 'en' %}Locked Boundary Simulation{% else %}Kilitli Sınır Simülasyonu{% endif %}</small>
             </div>
             
             <div class="map-wrapper">
@@ -353,7 +353,7 @@
             {
                 "id": {{ incident.id }},
                 "title": "{{ incident.title | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}",
-                "category": "{{ incident.category | replace('\"', '\\\"') }}",
+                "category": "{{ _(incident.category) | replace('\"', '\\\"') }}",
                 "latitude": "{{ incident.latitude }}",
                 "longitude": "{{ incident.longitude }}",
                 "description": "{{ incident.description | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}"
@@ -469,7 +469,8 @@
         if (simBtn) {
             simBtn.addEventListener('click', () => {
                 simBtn.disabled = true;
-                simBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> İhbar Gönderiliyor...`;
+                const isEn = '{{ active_lang }}' === 'en';
+                simBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${isEn ? 'Sending Incident...' : 'İhbar Gönderiliyor...'}`;
                 
                 fetch('{{ url_for("main.create_fake_incident") }}', {
                     method: 'POST',
@@ -481,16 +482,16 @@
                     if (response.ok) {
                         return response.json();
                     }
-                    throw new Error('İstek başarısız oldu.');
+                    throw new Error(isEn ? 'Request failed.' : 'İstek başarısız oldu.');
                 })
                 .then(data => {
                     window.location.reload();
                 })
                 .catch(error => {
                     console.error('Hata:', error);
-                    alert('Simülasyon ihbarı tetiklenirken bir hata oluştu.');
+                    alert(isEn ? 'An error occurred while triggering simulation incident.' : 'Simülasyon ihbarı tetiklenirken bir hata oluştu.');
                     simBtn.disabled = false;
-                    simBtn.innerHTML = `🚨 Simülasyon İhbarı Tetikle`;
+                    simBtn.innerHTML = isEn ? `🚨 Trigger Simulation Incident` : `🚨 Simülasyon İhbarı Tetikle`;
                 });
             });
         }

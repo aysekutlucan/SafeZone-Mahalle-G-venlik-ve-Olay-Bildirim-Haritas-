@@ -109,3 +109,38 @@ def create_fake_incident():
     db.session.commit()
     
     return {"status": "success", "message": "Simülasyon ihbarı başarıyla tetiklendi!"}, 200
+
+@main_bp.route('/set_language/<lang>')
+def set_language(lang):
+    from flask import session, request
+    if lang in ['tr', 'en']:
+        session['lang'] = lang
+    return redirect(request.referrer or url_for('main.index'))
+
+@main_bp.app_context_processor
+def inject_translations():
+    from flask import session
+    from app.main.translations import TRANSLATIONS
+    
+    lang = session.get('lang', 'tr')
+    if lang not in ['tr', 'en']:
+        lang = 'tr'
+        
+    def translate(key):
+        if not key:
+            return ''
+        cleaned_key = key.strip().lower()
+        lookup_key = cleaned_key.replace('ı', 'i').replace('ğ', 'g').replace('ü', 'u').replace('ş', 's').replace('ö', 'o').replace('ç', 'c')
+        
+        translation_dict = TRANSLATIONS.get(lang, {})
+        
+        if lookup_key in translation_dict:
+            return translation_dict[lookup_key]
+        elif cleaned_key in translation_dict:
+            return translation_dict[cleaned_key]
+        elif key in translation_dict:
+            return translation_dict[key]
+            
+        return key
+
+    return dict(_=translate, active_lang=lang)

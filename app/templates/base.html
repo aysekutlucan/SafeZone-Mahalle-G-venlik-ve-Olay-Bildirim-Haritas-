@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title if title else 'SafeZone - Güvenlik Paneli' }}</title>
+    <title>{{ _(title) if title else _('SafeZone - Güvenlik Paneli') }}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -197,7 +197,7 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
                 <i class="bi bi-shield-lock-fill text-primary" style="color: var(--accent-color) !important;"></i>
                 SafeZone
-                <i class="bi bi-cat text-muted animate-breathe small ms-1" style="font-size: 0.95rem;" title="SafeZone Uyuyan Bekçi Kedisi"></i>
+                <i class="bi bi-cat text-muted animate-breathe small ms-1" style="font-size: 0.95rem;" title="{{ _('SafeZone Uyuyan Bekçi Kedisi') }}"></i>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -205,33 +205,47 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}">Ana Sayfa</a>
+                        <a class="nav-link" href="{{ url_for('main.index') }}">{{ _('Ana Sayfa') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">İhbar Bildir</a>
+                        <a class="nav-link" href="{{ url_for('main.new_incident') }}">{{ _('İhbar Bildir') }}</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                    <!-- Language Switcher -->
+                    <li class="nav-item me-lg-2 my-2 my-lg-0">
+                        {% if active_lang == 'tr' %}
+                        <a href="{{ url_for('main.set_language', lang='en') }}" class="theme-toggle-btn text-decoration-none">
+                            <i class="bi bi-translate text-warning"></i>
+                            <span>EN</span>
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('main.set_language', lang='tr') }}" class="theme-toggle-btn text-decoration-none">
+                            <i class="bi bi-translate text-info"></i>
+                            <span>TR</span>
+                        </a>
+                        {% endif %}
+                    </li>
                     <!-- Theme Toggle Switch -->
                     <li class="nav-item me-lg-2 my-2 my-lg-0">
                         <button id="theme-toggle" class="theme-toggle-btn">
                             <i id="theme-toggle-icon" class="bi bi-moon-stars-fill"></i>
-                            <span id="theme-toggle-text">Koyu</span>
+                            <span id="theme-toggle-text">{% if active_lang == 'en' %}Dark{% else %}Koyu{% endif %}</span>
                         </button>
                     </li>
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.profile') }}">Profil</a>
+                            <a class="nav-link" href="{{ url_for('auth.profile') }}">{{ _('Profil') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Çıkış Yap</a>
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ _('Çıkış Yap') }}</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.login') }}">Giriş</a>
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">{{ _('Giriş') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.register') }}">Kayıt</a>
+                            <a class="nav-link" href="{{ url_for('auth.register') }}">{{ _('Kayıt') }}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -260,7 +274,7 @@
     <!-- Minimalist Footer -->
     <footer class="footer-minimal py-3 text-center mt-auto">
         <div class="container">
-            &copy; 2026 SafeZone. Tüm hakları saklıdır.
+            &copy; 2026 SafeZone. {% if active_lang == 'en' %}All rights reserved.{% else %}Tüm hakları saklıdır.{% endif %}
         </div>
     </footer>
 
@@ -273,14 +287,15 @@
         const themeToggleIcon = document.getElementById('theme-toggle-icon');
         const themeToggleText = document.getElementById('theme-toggle-text');
 
+        const currentLang = '{{ active_lang }}';
         function updateThemeUI(theme) {
             if (theme === 'light') {
                 themeToggleIcon.className = 'bi bi-sun-fill text-warning';
-                themeToggleText.textContent = 'Açık';
+                themeToggleText.textContent = currentLang === 'en' ? 'Light' : 'Açık';
                 document.documentElement.style.setProperty('--theme-invert-val', '1');
             } else {
                 themeToggleIcon.className = 'bi bi-moon-stars-fill text-info';
-                themeToggleText.textContent = 'Koyu';
+                themeToggleText.textContent = currentLang === 'en' ? 'Dark' : 'Koyu';
                 document.documentElement.style.setProperty('--theme-invert-val', '0');
             }
         }

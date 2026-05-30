@@ -94,12 +94,23 @@ TRANSLATIONS = {
         'game_win': 'Sınır İhlali Çözüldü! Ana sayfaya yönlendiriliyorsunuz...',
         'game_lose': 'Bağlantı Kesildi! Sistem yeniden başlatılıyor...',
         
+        # Profile page specific
+        'kullanıcı profili': 'Kullanıcı Profili',
+        'kullanıcı adı': 'Kullanıcı Adı',
+        'e-posta': 'E-posta',
+        'rol': 'Rol',
+        'bildirdiğim olaylar': 'Bildirdiğim Olaylar',
+        'koordinatlar': 'Koordinatlar',
+        'tarih': 'Tarih',
+        'mahalle': 'Mahalle',
+        'henüz bildirdiğiniz bir olay bulunmuyor.': 'Henüz bildirdiğiniz bir olay bulunmuyor.',
+        
         # --- DATABASE CONTENT (FAKE INCIDENT SIMULATION DATA) ---
         # Asayiş / Public Order Titles & Descriptions
         "Şüpheli Çanta İhbarı": "Şüpheli Çanta İhbarı",
         "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.": "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.",
         "Sokak Kavgası": "Sokak Kavgası",
-        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursur.",
+        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.",
         "Gürültü ve Taşkınlık": "Gürültü ve Taşkınlık",
         "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.": "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.",
         "Market Hırsızlığı Girişimi": "Market Hırsızlığı Girişimi",
@@ -229,6 +240,17 @@ TRANSLATIONS = {
         'güvenli bölgeye dön': 'Return to Secure Zone',
         'game_win': 'System Violation Resolved! Redirecting to home page...',
         'game_lose': 'Connection Lost! System restarting...',
+        
+        # Profile page specific
+        'kullanıcı profili': 'User Profile',
+        'kullanıcı adı': 'Username',
+        'e-posta': 'E-mail',
+        'rol': 'Role',
+        'bildirdiğim olaylar': 'My Reported Incidents',
+        'koordinatlar': 'Coordinates',
+        'tarih': 'Date',
+        'mahalle': 'Neighborhood',
+        'henüz bildirdiğiniz bir olay bulunmuyor.': 'You have not reported any incidents yet.',
         
         # --- DATABASE CONTENT (FAKE INCIDENT SIMULATION DATA) ---
         # Asayiş / Public Order Titles & Descriptions

@@ -206,3 +206,12 @@
 1. **İhbar Kartlarına Dikey Üç Nokta Menüsü (Bootstrap Dropdown):** Kartların üzerindeki çıplak kırmızı çöp kutusu kaldırılarak yerine, tıklama olaylarını kart geneline yaymayan (`event.stopPropagation()`) ve Bootstrap Dropdown altyapısını kullanan şık bir dikey üç nokta simgeli (`bi-three-dots-vertical`) aksiyon menüsü entegre edildi. Bu menü yalnızca ihbar sahibi kullanıcılar için render edilir ve açılan panelde dile duyarlı "Sil" / "Delete" seçeneğini sunar.
 2. **Olay Detay Paneli (Bootstrap Modal):** Kullanıcı sol listedeki ihbar kartlarına tıkladığında hem haritada o konuma uçan hem de olayın tüm detaylarını (Başlık, kategori renkli rozeti, mahalle, enlem/boylam, ihbarı yapan kullanıcı, oluşturulma tarihi/saati ve geniş açıklama) sunan premium bir detay modalı (`#incidentDetailModal`) açılacak şekilde JS & HTML mekanizması inşa edildi.
 3. **Modal Çoklu Dil Entegrasyonu (TR/EN Localization):** Modal içerisindeki tüm sabit başlıklar (Olay Detayı, Kategori, Mahalle, Tarih vb.) ve dinamik veriler, `translations.py` üzerinden geçirilerek dil durumuna göre %100 lokalize şekilde görüntülendi. Koyu modda parlayan neon su yeşili kenarlıklı, açık modda ise krem renginde şık kart tasarımına uygun kurumsal tema senkronizasyonu Modal bileşenine de yansıtıldı.
+
+## AI Geliştirme Günlüğü - Oturum 21
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Kullanıcı Profili (profile.html) Çoklu Dil Entegrasyonu:** Kullanıcı profili (`profile.html`) sayfasındaki dil desteği eksiklikleri giderilerek sayfa tamamen dinamik ve %100 lokalize (TR/EN) hale getirildi. Sayfa başlıkları, kullanıcı bilgisi etiketleri, geçmiş ihbarlar ve silme durumları dil süzgecine bağlandı.
+2. **translations.py Profil Kelimelerinin Eklenmesi:** Profil sayfasındaki tüm statik kelimeler ("Kullanıcı Profili", "Kullanıcı Adı", "Rol", "Bildirdiğim Olaylar", "Koordinatlar" vb.) ve "Henüz bildirdiğiniz bir olay bulunmuyor." gibi geri bildirim uyarısının İngilizce karşılıkları `translations.py` dosyasına dahil edildi.
+3. **Profil Sayfası Jinja2 Veri Çevirisi:** Profil sayfasında listelenen ihbarların `incident.title` (başlık), `incident.description` (açıklama) ve `incident.category` (kategori) alanları `_()` küresel çeviri fonksiyonundan geçirilerek veri tabanından gelen geçmiş ihbarların da dil seçimine göre pürüzsüzce yerelleştirilmesi sağlandı.

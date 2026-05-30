@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Kullanıcı Profili</h2>
+    <h2>{{ _('Kullanıcı Profili') }}</h2>
     <p>
-        <strong>Kullanıcı Adı:</strong> {{ current_user.username }}<br>
-        <strong>E-posta:</strong> {{ current_user.email }}<br>
-        <strong>Rol:</strong> {{ current_user.role }}
+        <strong>{{ _('Kullanıcı Adı') }}:</strong> {{ current_user.username }}<br>
+        <strong>{{ _('E-posta') }}:</strong> {{ current_user.email }}<br>
+        <strong>{{ _('Rol') }}:</strong> {{ _(current_user.role) }}
     </p>
 
     <hr>
     
-    <h3>Bildirdiğim Olaylar</h3>
+    <h3>{{ _('Bildirdiğim Olaylar') }}</h3>
     <ul>
         {% for incident in current_user.incidents %}
             <li>
-                <strong>{{ incident.title }}</strong> - Kategori: {{ incident.category }} 
-                (Mahalle: {{ incident.neighborhood_name }})<br>
-                <em>Koordinatlar: [{{ incident.latitude }}, {{ incident.longitude }}]</em><br>
-                <p>{{ incident.description }}</p>
-                <small>Tarih: {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                <strong>{{ _(incident.title) }}</strong> - {{ _('Kategori') }}: {{ _(incident.category) }} 
+                ({{ _('Mahalle') }}: {{ incident.neighborhood_name }})<br>
+                <em>{{ _('Koordinatlar') }}: [{{ incident.latitude }}, {{ incident.longitude }}]</em><br>
+                <p>{{ _(incident.description) }}</p>
+                <small>{{ _('Tarih') }}: {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
             </li>
             <br>
         {% else %}
-            <li>Henüz bildirdiğiniz bir olay bulunmuyor.</li>
+            <li>{{ _('Henüz bildirdiğiniz bir olay bulunmuyor.') }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

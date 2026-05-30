@@ -109,3 +109,14 @@
    - Şüpheli Durum İhbarları: Parlayan Siber Cyan Kedi (`cat-cyan`)
    - Genel/Diğer İhbarlar: Parlayan Su Yeşili Kedi (`cat-yesil`)
    - İkonlar üzerine gelindiğinde büyüme (`transform: scale(1.15)`) ve daha şiddetli parlama (`box-shadow`) animasyonları entegre edildi.
+
+## AI Geliştirme Günlüğü - Oturum 11
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Sahte Simülasyon İhbar Rotaları (/incident/fake):** `app/main/routes.py` içerisine yalnızca giriş yapmış kullanıcıların (`@login_required`) erişebileceği `/incident/fake` POST rotası eklendi.
+   - Ankara/Çankaya sınırları içerisinde (`39.8800` - `39.9500` enlem, `32.8000` - `32.8800` boylam) rastgele koordinatlar üreten bir algoritma yazıldı.
+   - Kategorilere (Asayiş, Trafik, Şüpheli Durum, Genel) uygun rastgele başlıklar, detaylı Türkçe açıklamalar ve Çankaya'ya uygun mahalle isimleri üreten bir mock generator entegre edilerek `Incident` modeliyle veritabanına kayıt sağlandı.
+2. **AJAX Tetikleme Butonu Entegrasyonu:** Sol panelde (col-lg-4) ihbar listesinin hemen üzerine şık, kurumsal temamıza uygun (Açık modda pembe, koyu modda neon su yeşili parlayan) `"🚨 Simülasyon İhbarı Tetikle"` butonu eklendi.
+3. **AJAX (Fetch API) ve Dinamik Yenileme:** Buton tetiklendiğinde sayfa yenilenmeden arka planda istek göndermesini sağlayan Fetch API JS kodu yazıldı. İhbar başarıyla oluşturulduktan sonra ekranın otomatik tazelenerek yeni ihbarın kedi ikonuyla haritaya yerleşmesi sağlandı.

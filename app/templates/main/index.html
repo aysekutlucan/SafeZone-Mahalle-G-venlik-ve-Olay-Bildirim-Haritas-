@@ -254,6 +254,15 @@
                 <span><i class="bi bi-list-stars me-2 text-info" style="color: var(--accent-color) !important;"></i>Son İhbarlar</span>
                 <small class="text-muted">Tıklayıp Haritada Odaklanın</small>
             </div>
+
+            {% if current_user.is_authenticated %}
+                <div class="d-grid mb-3">
+                    <button id="trigger-simulation-btn" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 rounded-pill py-2 shadow-sm fw-bold">
+                        <i class="bi bi-alarm-fill text-danger animate-pulse" style="color: var(--btn-primary-text) !important;"></i>
+                        🚨 Simülasyon İhbarı Tetikle
+                    </button>
+                </div>
+            {% endif %}
             
             <div class="scrollable-incident-list">
                 {% for incident in incidents %}
@@ -453,6 +462,37 @@
                     }, 500);
                 }
             }
+        }
+
+        // Trigger fake simulation incident via AJAX
+        const simBtn = document.getElementById('trigger-simulation-btn');
+        if (simBtn) {
+            simBtn.addEventListener('click', () => {
+                simBtn.disabled = true;
+                simBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> İhbar Gönderiliyor...`;
+                
+                fetch('{{ url_for("main.create_fake_incident") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('İstek başarısız oldu.');
+                })
+                .then(data => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    alert('Simülasyon ihbarı tetiklenirken bir hata oluştu.');
+                    simBtn.disabled = false;
+                    simBtn.innerHTML = `🚨 Simülasyon İhbarı Tetikle`;
+                });
+            });
         }
     </script>
 {% endblock %}

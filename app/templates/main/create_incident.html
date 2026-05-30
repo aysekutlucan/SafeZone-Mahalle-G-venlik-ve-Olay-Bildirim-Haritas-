@@ -51,9 +51,20 @@
         color: #00fa9a !important;
     }
     
-    /* Koyu modda haritayı taktiksel tona uydurmak için filtre */
+    /* Koyu modda haritayı taktiksel tona uydurmak için filtre (Sokak etiketlerinin okunabilirliği için optimize edildi) */
     [data-theme="dark"] .leaflet-layer {
-        filter: hue-rotate(200deg) saturate(1.4) brightness(0.85) contrast(1.2) !important;
+        filter: hue-rotate(200deg) saturate(1.1) brightness(0.95) contrast(1.1) !important;
+    }
+
+    /* Glowing alert / breathe animation for uyanık glowing cat header maskot */
+    @keyframes eyes-glow {
+        0%, 100% { filter: drop-shadow(0 0 2px var(--accent-color)); }
+        50% { filter: drop-shadow(0 0 8px var(--accent-color)); }
+    }
+    .glowing-cat-header {
+        animation: eyes-glow 2s ease-in-out infinite;
+        display: inline-block;
+        color: var(--accent-color) !important;
     }
 </style>
 
@@ -68,6 +79,7 @@
                 <h2 class="h3 mb-0 d-flex align-items-center gap-2">
                     <i class="bi bi-shield-plus text-primary" style="color: var(--accent-color) !important;"></i>
                     Yeni Olay Bildir
+                    <i class="bi bi-cat-fill glowing-cat-header" title="SafeZone Tetikte Olan Bekçi Kedisi"></i>
                 </h2>
                 <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">İptal Et</a>
             </div>
@@ -110,7 +122,14 @@
                             </div>
                             <div class="col-md-6">
                                 {{ form.neighborhood_name.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                {{ form.neighborhood_name(class="form-control bg-dark text-white border-secondary", placeholder="Mahalle adı") }}
+                                <select id="neighborhood_name" name="neighborhood_name" class="form-select bg-dark text-white border-secondary form-control" required="required">
+                                    <option value="" disabled selected>Mahalle seçin</option>
+                                    <option value="Kızılay" data-lat="39.9207" data-lng="32.8541">Kızılay</option>
+                                    <option value="Bahçelievler" data-lat="39.9205" data-lng="32.8272">Bahçelievler</option>
+                                    <option value="Tunalı Hilmi" data-lat="39.9056" data-lng="32.8601">Tunalı Hilmi</option>
+                                    <option value="Anıttepe" data-lat="39.9244" data-lng="32.8427">Anıttepe</option>
+                                    <option value="Maltepe" data-lat="39.9298" data-lng="32.8443">Maltepe</option>
+                                </select>
                                 {% for error in form.neighborhood_name.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
@@ -232,6 +251,40 @@
                 map.removeLayer(marker);
                 marker = null;
             }
+        }
+    });
+
+    // Neighborhood select onChange handler with L.Map flyTo transition
+    const neighborhoodSelect = document.getElementById('neighborhood_name');
+    neighborhoodSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const lat = parseFloat(selectedOption.getAttribute('data-lat'));
+        const lng = parseFloat(selectedOption.getAttribute('data-lng'));
+        
+        if (lat && lng) {
+            document.getElementById('latitude').value = lat.toFixed(6);
+            document.getElementById('longitude').value = lng.toFixed(6);
+            
+            // Clear borders alert
+            document.getElementById('boundary-alert').classList.add('d-none');
+            
+            // Smoothly flyTo selected neighborhood coordinate
+            map.flyTo([lat, lng], 16, {
+                animate: true,
+                duration: 1.5
+            });
+            
+            // Draw marker
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            const selectIcon = L.divIcon({
+                html: `<div class="cat-marker cat-yesil"><i class="bi bi-geo-alt-fill"></i></div>`,
+                className: 'custom-cat-icon',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+            marker = L.marker([lat, lng], { icon: selectIcon }).addTo(map);
         }
     });
 </script>

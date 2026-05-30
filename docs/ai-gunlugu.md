@@ -142,3 +142,14 @@
    - Seçilen konum Çankaya simülasyon sınırları (`39.8800` - `39.9500` enlem, `32.8000` - `32.8800` boylam) içerisindeyse enlem/boylam alanları otomatik doldurulur ve haritaya yeşil bir "Seçilen Konum" markeri yerleştirilir.
    - Sınırlar dışına tıklanırsa, form güncellenmez ve ekranda şık, parlayan Bootstrap Toast/Alert benzeri özel bir *"Sınır İhlali: Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!"* uyarısı fırlatılır.
 4. **Dinamik Harita Temaları:** Olay bildirme haritası da temaya göre otomatik olarak değişecek şekilde `themeChanged` olay dinleyicisi ile CartoDB Voyager ve CartoDB Dark Matter katmanlarıyla senkronize edildi.
+
+## AI Geliştirme Günlüğü - Oturum 14
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Harita Görünürlük İyileştirmesi:** `app/templates/main/create_incident.html` dosyasındaki koyu mod harita katmanı filtresi hafifletilerek (`brightness(0.95)`, `contrast(1.1)`) sokakların (Bahçelievler, Mebusevleri vb.) ve etiketlerin çok daha net görünmesi sağlandı.
+2. **Mahalle Seçimli 'flyTo' Mekanizması:** 'Mahalle Adı' girdi alanı açılır liste (`<select>`) haline getirildi. Kızılay, Bahçelievler, Tunalı Hilmi, Anıttepe, Maltepe mahalleleri eklendi. Kullanıcı mahalle seçtiği an haritanın o konuma pürüzsüzce uçmasını sağlayan `map.flyTo()` kodu yazıldı ve koordinatlar otomatik dolduruldu.
+3. **Kedi Maskot Estetikleri:**
+   - **Ana Sayfa (breathe):** `base.html` Navbar marka adının yanına hafifçe nefes alarak uyuyan sempatik bir kedi ikonu (`bi-cat` + `animate-breathe`) yerleştirildi.
+   - **Olay Bildir Sayfası (glowing-cat):** `create_incident.html` sayfa başlığının yanına gözleri neon ışıkla parlayan, tetikte duran bir kedi maskotu (`bi-cat-fill` + `glowing-cat-header`) yerleştirildi.

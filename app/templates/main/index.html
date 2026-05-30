@@ -118,6 +118,74 @@
             color: var(--text-muted) !important;
         }
 
+        /* Koyu modda haritayı koyu mavi / taktiksel tona uydurmak için filtre */
+        [data-theme="dark"] .leaflet-layer {
+            filter: hue-rotate(200deg) saturate(1.4) brightness(0.85) contrast(1.2) !important;
+        }
+
+        /* Glowing Cat Markers */
+        .cat-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cat-marker i {
+            font-size: 1.15rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Category Specific Glowing Colors */
+        .cat-kirmizi {
+            border-color: #ff3366 !important;
+            box-shadow: 0 0 12px rgba(255, 51, 102, 0.6) !important;
+            color: #ff3366 !important;
+        }
+        .cat-kirmizi:hover {
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.9) !important;
+            transform: scale(1.15);
+        }
+
+        .cat-sari {
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.6) !important;
+            color: #ffd700 !important;
+        }
+        .cat-sari:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.9) !important;
+            transform: scale(1.15);
+        }
+
+        .cat-cyan {
+            border-color: #00e5ff !important;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6) !important;
+            color: #00e5ff !important;
+        }
+        .cat-cyan:hover {
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.9) !important;
+            transform: scale(1.15);
+        }
+
+        .cat-yesil {
+            border-color: #00fa9a !important;
+            box-shadow: 0 0 12px rgba(0, 250, 154, 0.6) !important;
+            color: #00fa9a !important;
+        }
+        .cat-yesil:hover {
+            box-shadow: 0 0 20px rgba(0, 250, 154, 0.9) !important;
+            transform: scale(1.15);
+        }
+
         /* Custom Pagination Styling */
         .custom-pagination {
             margin-top: 1.5rem;
@@ -331,11 +399,33 @@
         const incidentsData = JSON.parse(document.getElementById('incidents-data').textContent);
         const markers = {};
 
+        // Helper to generate dynamic colored glowing cat icons
+        function getCatIcon(category) {
+            let colorClass = 'cat-yesil'; // Default Su Yeşili
+            const cat = category.toLowerCase();
+            
+            if (['asayiş', 'hırsızlık', 'saldırı', 'gasp', 'kritik', 'yangın', 'afet'].some(keyword => cat.includes(keyword))) {
+                colorClass = 'cat-kirmizi';
+            } else if (['trafik', 'kaza', 'yol kapanması', 'yol'].some(keyword => cat.includes(keyword))) {
+                colorClass = 'cat-sari';
+            } else if (['şüpheli', 'şüpheli durum', 'kayıp'].some(keyword => cat.includes(keyword))) {
+                colorClass = 'cat-cyan';
+            }
+            
+            return L.divIcon({
+                html: `<div class="cat-marker ${colorClass}"><i class="bi bi-cat-fill"></i></div>`,
+                className: 'custom-cat-icon',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+            });
+        }
+
         incidentsData.forEach((incident) => {
             if (incident.latitude && incident.longitude && incident.latitude !== "None" && incident.longitude !== "None") {
                 var lat = parseFloat(incident.latitude);
                 var lng = parseFloat(incident.longitude);
-                var marker = L.marker([lat, lng]).addTo(map);
+                var marker = L.marker([lat, lng], { icon: getCatIcon(incident.category) }).addTo(map);
                 marker.bindPopup(`
                     <div style="font-family: 'Roboto', sans-serif; min-width: 180px;">
                         <h6 style="margin-bottom: 5px; font-weight: 700; color: var(--text-color);">${incident.title}</h6>

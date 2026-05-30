@@ -95,3 +95,17 @@
 2. **Navbar Tema Değiştirme Butonu:** Üst navigasyon barının sağ kısmına şık bir Güneş/Ay (`bi-sun-fill`/`bi-moon-stars-fill`) ikonu olan dinamik bir tema seçici butonu yerleştirildi.
 3. **JS LocalStorage ve Tema Senkronizasyonu:** Kullanıcının seçtiği temanın tarayıcı hafızasında saklanması (`localStorage`) ve sayfa geçişlerinde ekranın anlık titremesini engellemek için `<head>` içine anlık tema yükleme scripti entegre edildi.
 4. **Dinamik Coğrafi Harita Katmanı Değişimi:** Tema toggled olduğunda tetiklenen özel `themeChanged` JS olayı sayesinde, Leaflet harita katmanının CartoDB Voyager (Açık) ve CartoDB Dark Matter (Koyu) harita görselleriyle anında ve pürüzsüzce yer değiştirmesi sağlandı. Harita marker popup balonları ve diğer tüm bileşenler değişkenlere bağlanarak mükemmel renk uyumu elde edildi.
+
+## AI Geliştirme Günlüğü - Oturum 10
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Harita Taktik Mavi Filtresi:** Koyu modda haritanın zifiri siyah olmasını önlemek ve sokak hatlarının daha net seçilmesini sağlamak amacıyla, `.leaflet-layer` katmanına koyu mavi / taktiksel bir ton kazandıran özel bir CSS `filter` (`hue-rotate(200deg) saturate(1.4) brightness(0.85) contrast(1.2)`) uygulandı.
+2. **Kedi İkonu (bi-cat-fill) Marker Tasarımı:** Harita üzerindeki standart pin ikonları kaldırılarak, Bootstrap Icons kedi simgesini (`bi-cat-fill`) kullanan yuvarlak, modern ve parlayan özel Leaflet `L.divIcon` yapısı tanımlandı.
+3. **Kategorilere Göre Dinamik Renk/Glow Kontrolü:** Kedi ikonlarının, ihbar kategorisine göre dinamik renklerde neon ışıklarla parlaması sağlandı:
+   - Kritik/Asayiş İhbarları: Parlayan Neon Kırmızı Kedi (`cat-kirmizi`)
+   - Trafik/Kaza İhbarları: Parlayan Limon Sarısı Kedi (`cat-sari`)
+   - Şüpheli Durum İhbarları: Parlayan Siber Cyan Kedi (`cat-cyan`)
+   - Genel/Diğer İhbarlar: Parlayan Su Yeşili Kedi (`cat-yesil`)
+   - İkonlar üzerine gelindiğinde büyüme (`transform: scale(1.15)`) ve daha şiddetli parlama (`box-shadow`) animasyonları entegre edildi.

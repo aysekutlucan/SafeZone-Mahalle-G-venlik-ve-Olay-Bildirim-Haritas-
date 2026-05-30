@@ -148,8 +148,16 @@
 **Kullanılan Model:** Gemini 3.5 Flash (Medium)  
 
 ### Yapılan İşlemler:
-1. **Harita Görünürlük İyileştirmesi:** `app/templates/main/create_incident.html` dosyasındaki koyu mod harita katmanı filtresi hafifletilerek (`brightness(0.95)`, `contrast(1.1)`) sokakların (Bahçelievler, Mebusevleri vb.) ve etiketlerin çok daha net görünmesi sağlandı.
+1. **Harita Görünürlük İyileştirmesi:** `app/templates/main/create_incident.html` dosyasındaki koyu mod harita katmanı filteri hafifletilerek (`brightness(0.95)`, `contrast(1.1)`) sokakların (Bahçelievler, Mebusevleri vb.) ve etiketlerin çok daha net görünmesi sağlandı.
 2. **Mahalle Seçimli 'flyTo' Mekanizması:** 'Mahalle Adı' girdi alanı açılır liste (`<select>`) haline getirildi. Kızılay, Bahçelievler, Tunalı Hilmi, Anıttepe, Maltepe mahalleleri eklendi. Kullanıcı mahalle seçtiği an haritanın o konuma pürüzsüzce uçmasını sağlayan `map.flyTo()` kodu yazıldı ve koordinatlar otomatik dolduruldu.
 3. **Kedi Maskot Estetikleri:**
    - **Ana Sayfa (breathe):** `base.html` Navbar marka adının yanına hafifçe nefes alarak uyuyan sempatik bir kedi ikonu (`bi-cat` + `animate-breathe`) yerleştirildi.
    - **Olay Bildir Sayfası (glowing-cat):** `create_incident.html` sayfa başlığının yanına gözleri neon ışıkla parlayan, tetikte duran bir kedi maskotu (`bi-cat-fill` + `glowing-cat-header`) yerleştirildi.
+
+## AI Geliştirme Günlüğü - Oturum 15
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Açılır Liste (select/option) Okunabilirlik Düzeltmesi:** `app/templates/main/create_incident.html` dosyasında yer alan mahalle seçim listesi (`<select>` ve altındaki `<option>` elemanları) için tarayıcı varsayılanlarını ezen özel CSS kuralları tanımlandı. Koyu modda arka planın temiz bir koyu gri (`#1a1a1a`) ve yazıların beyaz (`#ffffff`), açık modda ise arka planın krem ve yazıların koyu kahve olması sağlanarak okunabilirlik sorunu tamamen çözüldü.
+2. **Gönder Butonu (Submit) Konum ve Hizalama Düzeltmesi:** Formun en altındaki 'Olay Bildir' butonunun alt kısımdan kesilmesini önlemek amacıyla, kartın alt boşlukları (`margin-bottom: 2rem`) artırıldı, kartın taşma kontrolü (`overflow: visible`) düzenlendi ve butonun üst boşluğu (`mt-4`) optimize edilerek sayfada tam ve pürüzsüz görünmesi sağlandı.

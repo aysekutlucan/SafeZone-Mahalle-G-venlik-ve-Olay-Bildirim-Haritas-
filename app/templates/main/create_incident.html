@@ -8,6 +8,60 @@
         border-radius: 12px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         transition: all 0.3s ease;
+        overflow: visible; /* Prevents submit button from clipping */
+        margin-bottom: 3rem; /* Breathing space above the footer */
+    }
+
+    /* Custom select & option styles to enforce maximum contrast and theme compatibility */
+    .form-select, select.form-control {
+        background-color: var(--input-bg) !important;
+        color: var(--text-color) !important;
+        border-color: var(--input-border) !important;
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .form-select:focus, select.form-control:focus {
+        border-color: var(--accent-color) !important;
+        box-shadow: 0 0 0 0.25rem var(--accent-glow) !important;
+        background-color: var(--input-bg) !important;
+        color: var(--text-color) !important;
+    }
+
+    /* Dark Mode Dropdown Option Styling */
+    [data-theme="dark"] .form-select,
+    [data-theme="dark"] select.form-control {
+        background-color: #1a1a1a !important;
+        color: #00fa9a !important; /* Neon su yeşili */
+    }
+    
+    [data-theme="dark"] .form-select option,
+    [data-theme="dark"] select.form-control option {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important; /* Pırıl pırıl beyaz */
+    }
+
+    [data-theme="dark"] .form-select option:disabled,
+    [data-theme="dark"] select.form-control option:disabled {
+        color: #666666 !important;
+    }
+
+    /* Light Mode Dropdown Option Styling */
+    [data-theme="light"] .form-select,
+    [data-theme="light"] select.form-control {
+        background-color: #fffdfa !important; /* Krem */
+        color: #2d1b10 !important; /* Koyu kahve/siyah */
+        border-color: #cbd5e1 !important;
+    }
+    
+    [data-theme="light"] .form-select option,
+    [data-theme="light"] select.form-control option {
+        background-color: #fffdfa !important; /* Krem */
+        color: #2d1b10 !important; /* Koyu kahve/siyah */
+    }
+
+    [data-theme="light"] .form-select option:disabled,
+    [data-theme="light"] select.form-control option:disabled {
+        color: #a0a0a0 !important;
     }
     .console-header {
         border-bottom: 2px solid var(--card-border);
@@ -115,14 +169,14 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 {{ form.category.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                {{ form.category(class="form-select bg-dark text-white border-secondary form-control") }}
+                                {{ form.category(class="form-select form-control") }}
                                 {% for error in form.category.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
                             </div>
                             <div class="col-md-6">
                                 {{ form.neighborhood_name.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                <select id="neighborhood_name" name="neighborhood_name" class="form-select bg-dark text-white border-secondary form-control" required="required">
+                                <select id="neighborhood_name" name="neighborhood_name" class="form-select form-control" required="required">
                                     <option value="" disabled selected>Mahalle seçin</option>
                                     <option value="Kızılay" data-lat="39.9207" data-lng="32.8541">Kızılay</option>
                                     <option value="Bahçelievler" data-lat="39.9205" data-lng="32.8272">Bahçelievler</option>
@@ -154,7 +208,7 @@
                             </div>
                         </div>
 
-                        <div class="d-grid">
+                        <div class="d-grid mt-4">
                             {{ form.submit(class="btn btn-primary btn-lg rounded-pill fw-bold py-2 shadow-sm") }}
                         </div>
                     </div>

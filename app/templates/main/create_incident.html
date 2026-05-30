@@ -176,14 +176,7 @@
                             </div>
                             <div class="col-md-6">
                                 {{ form.neighborhood_name.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
-                                <select id="neighborhood_name" name="neighborhood_name" class="form-select form-control" required="required">
-                                    <option value="" disabled selected>Mahalle seçin</option>
-                                    <option value="Kızılay" data-lat="39.9207" data-lng="32.8541">Kızılay</option>
-                                    <option value="Bahçelievler" data-lat="39.9205" data-lng="32.8272">Bahçelievler</option>
-                                    <option value="Tunalı Hilmi" data-lat="39.9056" data-lng="32.8601">Tunalı Hilmi</option>
-                                    <option value="Anıttepe" data-lat="39.9244" data-lng="32.8427">Anıttepe</option>
-                                    <option value="Maltepe" data-lat="39.9298" data-lng="32.8443">Maltepe</option>
-                                </select>
+                                {{ form.neighborhood_name(class="form-control", placeholder="Örn: Kızılay, Bahçelievler...", required="required", id="neighborhood_name") }}
                                 {% for error in form.neighborhood_name.errors %}
                                     <div class="text-danger small mt-1">[{{ error }}]</div>
                                 {% endfor %}
@@ -308,12 +301,37 @@
         }
     });
 
-    // Neighborhood select onChange handler with L.Map flyTo transition
-    const neighborhoodSelect = document.getElementById('neighborhood_name');
-    neighborhoodSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const lat = parseFloat(selectedOption.getAttribute('data-lat'));
-        const lng = parseFloat(selectedOption.getAttribute('data-lng'));
+    // Neighborhood input matching with dynamic flyTo transition
+    const neighborhoodInput = document.getElementById('neighborhood_name');
+    
+    function handleNeighborhoodMatch() {
+        const val = neighborhoodInput.value || '';
+        const norm = val.toLowerCase()
+            .replace(/ı/g, 'i')
+            .replace(/ğ/g, 'g')
+            .replace(/ü/g, 'u')
+            .replace(/ş/g, 's')
+            .replace(/ö/g, 'o')
+            .replace(/ç/g, 'c');
+            
+        let lat = null, lng = null;
+        
+        if (norm.includes('kizilay')) {
+            lat = 39.9207;
+            lng = 32.8541;
+        } else if (norm.includes('bahceli')) {
+            lat = 39.9205;
+            lng = 32.8272;
+        } else if (norm.includes('tunali')) {
+            lat = 39.9056;
+            lng = 32.8601;
+        } else if (norm.includes('anittepe')) {
+            lat = 39.9244;
+            lng = 32.8427;
+        } else if (norm.includes('maltepe')) {
+            lat = 39.9298;
+            lng = 32.8443;
+        }
         
         if (lat && lng) {
             document.getElementById('latitude').value = lat.toFixed(6);
@@ -340,6 +358,9 @@
             });
             marker = L.marker([lat, lng], { icon: selectIcon }).addTo(map);
         }
-    });
+    }
+    
+    neighborhoodInput.addEventListener('input', handleNeighborhoodMatch);
+    neighborhoodInput.addEventListener('blur', handleNeighborhoodMatch);
 </script>
 {% endblock %}

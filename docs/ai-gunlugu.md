@@ -161,3 +161,11 @@
 ### Yapılan İşlemler:
 1. **Açılır Liste (select/option) Okunabilirlik Düzeltmesi:** `app/templates/main/create_incident.html` dosyasında yer alan mahalle seçim listesi (`<select>` ve altındaki `<option>` elemanları) için tarayıcı varsayılanlarını ezen özel CSS kuralları tanımlandı. Koyu modda arka planın temiz bir koyu gri (`#1a1a1a`) ve yazıların beyaz (`#ffffff`), açık modda ise arka planın krem ve yazıların koyu kahve olması sağlanarak okunabilirlik sorunu tamamen çözüldü.
 2. **Gönder Butonu (Submit) Konum ve Hizalama Düzeltmesi:** Formun en altındaki 'Olay Bildir' butonunun alt kısımdan kesilmesini önlemek amacıyla, kartın alt boşlukları (`margin-bottom: 2rem`) artırıldı, kartın taşma kontrolü (`overflow: visible`) düzenlendi ve butonun üst boşluğu (`mt-4`) optimize edilerek sayfada tam ve pürüzsüz görünmesi sağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 16
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Akıllı Metin Girdili Mahalle Seçimi (select -> input):** `create_incident.html` sayfasındaki Mahalle Adı açılır menüsü (`select`) tamamen kaldırılarak yerine klavyeden serbestçe yazılabilir, koyu/açık temayla tam uyumlu standart bir `<input type="text">` alanı yerleştirildi.
+2. **JavaScript Dinamik Coğrafi Akıllı Eşleştirme:** Kullanıcının bu alana yazı yazarken veya odaktan çıktığında (`oninput`/`onblur`) çalışacak bir JS mekanizması geliştirildi. Girilen metin Türkçe karakter duyarsız veya küçük harfe çevrilerek analiz edilir; eğer 'kızılay', 'bahçeli', 'tunalı', 'anıttepe' veya 'maltepe' ifadelerini içeriyorsa harita anında o mahallenin koordinatlarına pürüzsüzce uçar (`map.flyTo`), koordinat alanlarını (readonly) otomatik doldurur ve haritada yeşil konum marker'ını günceller.

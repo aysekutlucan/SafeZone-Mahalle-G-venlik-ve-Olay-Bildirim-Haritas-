@@ -3,31 +3,32 @@
 {% block content %}
 <style>
     .error-container {
-        min-height: 60vh;
+        min-height: 70vh;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .error-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
+        background-color: var(--card-bg);
+        border: 1px solid var(--card-border);
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        max-width: 500px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        max-width: 550px;
         width: 100%;
         text-align: center;
-        padding: 3rem 2rem;
+        padding: 2.5rem 2rem;
+        transition: all 0.3s ease;
     }
     .error-icon {
-        font-size: 5rem;
-        color: #38bdf8; /* Cyan/Cyber Blue */
-        margin-bottom: 1.5rem;
+        font-size: 4rem;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
         display: inline-block;
-        filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+        filter: drop-shadow(0 0 15px var(--accent-glow));
     }
     @keyframes float {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        50% { transform: translateY(-8px); }
     }
     .animate-float {
         animation: float 4s ease-in-out infinite;
@@ -37,19 +38,234 @@
 <div class="error-container">
     <div class="error-card">
         <div class="error-icon animate-float">
-            <i class="bi bi-shield-exclamation"></i>
+            <i class="bi bi-shield-exclamation" style="color: var(--accent-color) !important;"></i>
         </div>
-        <h1 class="display-5 fw-bold text-white mb-2">Sınır İhlali</h1>
-        <h2 class="h5 text-muted mb-4">Hata Kodu: 404 - Sayfa Bulunamadı</h2>
-        <p class="text-secondary mb-4" style="line-height: 1.6;">
-            Talep ettiğiniz güvenli bölge koordinatları SafeZone veri tabanında bulunamadı. Lütfen kilitli simülasyon alanına geri dönün.
+        <h1 class="display-6 fw-bold text-white mb-2" style="color: var(--text-color) !important;">Sınır İhlali</h1>
+        <h2 class="h6 text-muted mb-3">Hata Kodu: 404 - Sayfa Bulunamadı</h2>
+        <p class="text-secondary mb-4 small" style="line-height: 1.5; color: var(--text-muted) !important;">
+            Aradığınız güvenli bölge koordinatları SafeZone veri tabanında bulunamadı. Lütfen kilitli simülasyon alanına geri dönün veya **aşağıdaki engelleri (tuğlaları) kırarak sınır ihlali bağlantısını onarın!**
         </p>
+
+        <!-- HTML5 Canvas for DX-Ball Game -->
+        <div class="mb-4 d-flex justify-content-center">
+            <canvas id="dxballCanvas" width="400" height="300" style="border: 2px solid var(--accent-color); border-radius: 8px; background-color: var(--input-bg); box-shadow: 0 0 15px var(--accent-glow); cursor: pointer;"></canvas>
+        </div>
+
         <div class="d-grid">
             <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-shield-check-fill text-dark"></i>
+                <i class="bi bi-shield-check-fill text-dark" style="color: var(--btn-primary-text) !important;"></i>
                 Güvenli Bölgeye Dön (Ana Sayfa)
             </a>
         </div>
     </div>
 </div>
+
+<!-- DX-Ball Game Script -->
+<script>
+    const canvas = document.getElementById("dxballCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    // Game variables
+    let ballRadius = 6;
+    let x = canvas.width / 2;
+    let y = canvas.height - 30;
+    let dx = 3;
+    let dy = -3;
+    
+    let paddleHeight = 8;
+    let paddleWidth = 75;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+    
+    let rightPressed = false;
+    let leftPressed = false;
+    
+    // Bricks setup (Red, Yellow, Cyan, Green to match incident categories)
+    let brickRowCount = 4;
+    let brickColumnCount = 6;
+    let brickWidth = 54;
+    let brickHeight = 14;
+    let brickPadding = 6;
+    let brickOffsetTop = 30;
+    let brickOffsetLeft = 23;
+    
+    let bricks = [];
+    for (let c = 0; c < brickColumnCount; c++) {
+        bricks[c] = [];
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks[c][r] = { x: 0, y: 0, status: 1 };
+        }
+    }
+    
+    let score = 0;
+    let gameOver = false;
+    
+    // Helper to fetch theme variables dynamically from CSS
+    function getThemeColor(variable) {
+        return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+    }
+    
+    // Event listeners for keyboard and mouse
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    document.addEventListener("mousemove", mouseMoveHandler, false);
+    
+    function keyDownHandler(e) {
+        if (e.key === "Right" || e.key === "ArrowRight") {
+            rightPressed = true;
+        } else if (e.key === "Left" || e.key === "ArrowLeft") {
+            leftPressed = true;
+        }
+    }
+    
+    function keyUpHandler(e) {
+        if (e.key === "Right" || e.key === "ArrowRight") {
+            rightPressed = false;
+        } else if (e.key === "Left" || e.key === "ArrowLeft") {
+            leftPressed = false;
+        }
+    }
+    
+    function mouseMoveHandler(e) {
+        const rect = canvas.getBoundingClientRect();
+        let relativeX = e.clientX - rect.left;
+        if (relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddleWidth / 2;
+        }
+    }
+    
+    // Collision detection
+    function collisionDetection() {
+        for (let c = 0; c < brickColumnCount; c++) {
+            for (let r = 0; r < brickRowCount; r++) {
+                let b = bricks[c][r];
+                if (b.status === 1) {
+                    if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                        dy = -dy;
+                        b.status = 0;
+                        score++;
+                        if (score === brickRowCount * brickColumnCount) {
+                            endGame(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Draw ball
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = getThemeColor('--accent-color') || '#ffb6c1';
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+    // Draw paddle
+    function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+        ctx.fillStyle = getThemeColor('--text-color') || '#2d1b10';
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+    // Draw bricks
+    function drawBricks() {
+        const colors = ['#ff3366', '#ffd700', '#00e5ff', '#00fa9a']; // Red, Yellow, Cyan, Green
+        for (let c = 0; c < brickColumnCount; c++) {
+            for (let r = 0; r < brickRowCount; r++) {
+                if (bricks[c][r].status === 1) {
+                    let brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                    let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                    bricks[c][r].x = brickX;
+                    bricks[c][r].y = brickY;
+                    ctx.beginPath();
+                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                    ctx.fillStyle = colors[r % colors.length];
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        }
+    }
+    
+    // Draw status / Score
+    function drawStatus() {
+        ctx.font = "bold 11px 'Roboto', sans-serif";
+        ctx.fillStyle = getThemeColor('--text-muted') || '#cbd5e1';
+        ctx.fillText("Engeller: " + (brickRowCount * brickColumnCount - score), 15, 18);
+    }
+    
+    // End Game and auto redirect
+    function endGame(isWin) {
+        gameOver = true;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.font = "bold 18px 'Roboto', sans-serif";
+        ctx.textAlign = "center";
+        
+        if (isWin) {
+            ctx.fillStyle = '#00fa9a'; // Success green
+            ctx.fillText("Tebrikler! Sınır İhlali Onarıldı", canvas.width / 2, canvas.height / 2 - 10);
+        } else {
+            ctx.fillStyle = '#ff3366'; // Danger red
+            ctx.fillText("Bağlantı Kesildi (Game Over)", canvas.width / 2, canvas.height / 2 - 10);
+        }
+        
+        ctx.font = "12px 'Roboto', sans-serif";
+        ctx.fillStyle = getThemeColor('--text-muted') || '#cbd5e1';
+        ctx.fillText("3 saniye içinde güvenli bölgeye aktarılıyorsunuz...", canvas.width / 2, canvas.height / 2 + 20);
+        
+        setTimeout(() => {
+            window.location.href = "{{ url_for('main.index') }}";
+        }, 3000);
+    }
+    
+    // Main draw loop
+    function draw() {
+        if (gameOver) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBricks();
+        drawBall();
+        drawPaddle();
+        drawStatus();
+        collisionDetection();
+        
+        // Ball wall bouncing
+        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+            dx = -dx;
+        }
+        if (y + dy < ballRadius) {
+            dy = -dy;
+        } else if (y + dy > canvas.height - ballRadius - 10) {
+            // Check if ball hits the paddle
+            if (x > paddleX && x < paddleX + paddleWidth) {
+                dy = -dy;
+                // Add simple speed bounce angles
+                let hitPoint = x - (paddleX + paddleWidth / 2);
+                dx = hitPoint * 0.15;
+            } else if (y + dy > canvas.height - ballRadius) {
+                endGame(false);
+                return;
+            }
+        }
+        
+        // Keyboard controls
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
+            paddleX += 5;
+        } else if (leftPressed && paddleX > 0) {
+            paddleX -= 5;
+        }
+        
+        x += dx;
+        y += dy;
+        
+        requestAnimationFrame(draw);
+    }
+    
+    // Start game
+    draw();
+</script>
 {% endblock %}

@@ -120,3 +120,13 @@
    - Kategorilere (Asayiş, Trafik, Şüpheli Durum, Genel) uygun rastgele başlıklar, detaylı Türkçe açıklamalar ve Çankaya'ya uygun mahalle isimleri üreten bir mock generator entegre edilerek `Incident` modeliyle veritabanına kayıt sağlandı.
 2. **AJAX Tetikleme Butonu Entegrasyonu:** Sol panelde (col-lg-4) ihbar listesinin hemen üzerine şık, kurumsal temamıza uygun (Açık modda pembe, koyu modda neon su yeşili parlayan) `"🚨 Simülasyon İhbarı Tetikle"` butonu eklendi.
 3. **AJAX (Fetch API) ve Dinamik Yenileme:** Buton tetiklendiğinde sayfa yenilenmeden arka planda istek göndermesini sağlayan Fetch API JS kodu yazıldı. İhbar başarıyla oluşturulduktan sonra ekranın otomatik tazelenerek yeni ihbarın kedi ikonuyla haritaya yerleşmesi sağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 12
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **404 Sayfasında Nostaljik Tuğla Kırma (DX-Ball) Entegrasyonu:** `app/templates/errors/404.html` sayfası jüriyi eğlendirecek interaktif bir oyun alanına dönüştürüldü.
+2. **HTML5 Canvas ve Dinamik Temalı Tasarım:** Sayfaya 400x300px boyutlarında şık bir `<canvas>` alanı yerleştirildi. Canvas'ın arka planı ve kenarlıkları sistem değişkenlerimize (`var(--card-bg)`, `var(--accent-color)`) bağlanarak, açık modda toz pembe/krem, koyu modda ise parlayan neon su yeşili kenarlıklı siyah renkte açılması sağlandı.
+3. **Vanilla JS Oyun Algoritması:** Top fiziği, klavye/fare dinleyicileriyle kontrol edilen raket (paddle), çarptığında kırılan renkli tuğla (brick) dizilimleri saf JavaScript ile kodlandı.
+4. **Akıllı Yönlendirme (Auto-Redirect):** Oyun sonlandığında (Kazanma veya Kaybetme durumunda) canvas ekranında şık bir "Sınır İhlali Çözüldü" veya "Bağlantı Kesildi" mesajı basılması ve 3 saniye sonra kullanıcının otomatik olarak güvenli alana (Ana Sayfa) yönlendirilmesi sağlandı. Aynı zamanda yedek olarak alttaki "Güvenli Bölgeye Dön" butonu aktif bırakıldı.

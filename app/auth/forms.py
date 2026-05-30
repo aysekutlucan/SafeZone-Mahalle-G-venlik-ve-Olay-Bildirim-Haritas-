@@ -28,3 +28,19 @@ class LoginForm(FlaskForm):
     password = PasswordField('Şifre', validators=[DataRequired()])
     remember_me = BooleanField('Beni Hatırla')
     submit = SubmitField('Giriş Yap')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('E-posta', validators=[DataRequired(), Email()])
+    submit = SubmitField('Şifre Sıfırlama Linki Gönder')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('Bu e-posta adresiyle kayıtlı bir kullanıcı bulunamadı.')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Yeni Şifre', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Yeni Şifreyi Onayla', validators=[DataRequired(), EqualTo('password', message='Şifreler eşleşmiyor.')])
+    submit = SubmitField('Şifreyi Sıfırla')

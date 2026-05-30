@@ -5,7 +5,7 @@ from urllib.parse import urlsplit
 
 from app import db
 from app.auth import auth_bp
-from app.auth.forms import RegistrationForm, LoginForm
+from app.auth.forms import RegistrationForm, LoginForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -59,3 +59,40 @@ def profile():
     # current_user is already available in the template, we can just pass it implicitly
     # The incidents will be accessible via current_user.incidents
     return render_template('auth/profile.html', title='Profilim')
+
+
+@auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            token = user.get_reset_password_token()
+            reset_url = url_for('auth.reset_password', token=token, _external=True)
+            print("\n" + "="*50)
+            print("SafeZone Şifre Sıfırlama Talebi Alındı!")
+            print(f"Kullanıcı: {user.username}")
+            print(f"Sıfırlama Linki: {reset_url}")
+            print("="*50 + "\n")
+            flash('Şifre sıfırlama linki terminale başarıyla gönderildi (Geliştirici Modu). Lütfen terminal konsolunu kontrol edin.', 'success')
+            return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password_request.html', title='Şifre Sıfırlama Talebi', form=form)
+
+
+@auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        flash('Şifre sıfırlama linki geçersiz veya süresi dolmuş.', 'danger')
+        return redirect(url_for('main.index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.password_hash = generate_password_hash(form.password.data)
+        db.session.commit()
+        flash('Şifreniz başarıyla sıfırlandı! Yeni şifrenizle giriş yapabilirsiniz.', 'success')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', title='Şifreyi Sıfırla', form=form)

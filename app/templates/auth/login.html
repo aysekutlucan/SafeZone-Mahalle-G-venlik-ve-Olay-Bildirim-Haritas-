@@ -1,32 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Giriş Yap</h2>
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        
-        <div>
-            {{ form.email.label }}<br>
-            {{ form.email() }}
-            {% for error in form.email.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg" style="background-color: #1e293b; border: 1px solid #334155; border-radius: 12px;">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-shield-lock-fill text-primary display-4 mb-2 d-inline-block"></i>
+                    <h2 class="h3 fw-bold text-white">Giriş Yap</h2>
+                    <p class="text-muted">Güvenli komuta paneline erişmek için giriş yapın.</p>
+                </div>
+                
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label text-light fw-medium") }}
+                        {{ form.email(class="form-control bg-dark text-white border-secondary", placeholder="E-posta adresinizi girin") }}
+                        {% for error in form.email.errors %}
+                            <div class="text-danger small mt-1">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            {{ form.password.label(class="form-label text-light fw-medium") }}
+                            <a href="{{ url_for('auth.reset_password_request') }}" class="text-primary small text-decoration-none">Şifremi Unuttum?</a>
+                        </div>
+                        {{ form.password(class="form-control bg-dark text-white border-secondary", placeholder="Şifrenizi girin") }}
+                        {% for error in form.password.errors %}
+                            <div class="text-danger small mt-1">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4 form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label text-muted small") }}
+                    </div>
+                    
+                    <div class="d-grid mb-3">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-pill fw-bold") }}
+                    </div>
+                </form>
+                
+                <hr class="border-secondary my-4">
+                
+                <div class="text-center text-muted small">
+                    Henüz bir hesabınız yok mu? <a href="{{ url_for('auth.register') }}" class="text-primary text-decoration-none fw-bold">Hemen Kaydolun</a>
+                </div>
+            </div>
         </div>
-        <br>
-        <div>
-            {{ form.password.label }}<br>
-            {{ form.password() }}
-            {% for error in form.password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.remember_me() }} {{ form.remember_me.label }}
-        </div>
-        <br>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
+    </div>
+</div>
 {% endblock %}

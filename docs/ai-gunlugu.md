@@ -75,3 +75,13 @@
      - **Hibrit Tasarım ve Veri Entegrasyonu:** Jinja2 JSON veri adası mimarisi sayesinde JavaScript ile sunucu verisi sıfır hata ve yüksek güvenlik ile eşleştirildi.
      - **Etkileşimli Harita Kontrolleri:** Harita sınırlandırma ve interaktif odaklanma mekanizması, hem taktiksel görünümü zenginleştirdi hem de kullanıcı deneyimini (UX) üst seviyeye taşıdı.
      - **Mimarinin Gücü:** Application Factory Pattern ve Blueprint yapısının, projenin büyüdüğü aşamalarda (Örn: Hata yönetimi, sayfalama ve Dockerization) ne kadar modüler ve sürdürülebilir bir geliştirme sağladığı bizzat tecrübe edildi. SafeZone artık üretime (production) hazır, kusursuz bir proje haline geldi!
+
+## AI Geliştirme Günlüğü - Oturum 8
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Şifre Sıfırlama Formları Altyapısı:** `app/auth/forms.py` dosyasına e-posta talebi için `ResetPasswordRequestForm` ve yeni şifre tanımlama için `ResetPasswordForm` formları eklendi.
+2. **Güvenli Token Oluşturma ve Doğrulama (itsdangerous):** `app/models.py` içindeki `User` modeline Flask'ın güvenli serializer mimarisini (`itsdangerous.URLSafeTimedSerializer`) kullanan `get_reset_password_token` ve `verify_reset_password_token` metotları eklenerek güvenli, süreli şifre sıfırlama token yapısı entegre edildi.
+3. **Şifre Sıfırlama Rotaları ve Geliştirici Modu:** `app/auth/routes.py` içine `/reset_password_request` ve `/reset_password/<token>` rotaları eklendi. Geliştirici dostu simülasyon ortamında linkin terminale (`print()`) basılması ve arayüzde Türkçe bilgilendirici flash mesaj gösterilmesi sağlandı.
+4. **Şifre Sıfırlama Arayüz Şablonları:** `app/templates/auth/login.html` sayfasına şık bir "Şifremi Unuttum" bağlantısı eklendi. Kurumsal koyu lacivert temamıza uygun `reset_password_request.html` ve `reset_password.html` form sayfaları tasarlanıp oluşturuldu.

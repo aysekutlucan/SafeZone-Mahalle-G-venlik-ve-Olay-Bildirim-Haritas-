@@ -180,3 +180,12 @@
 3. **Arayüz Entegrasyonları (Jinja2 & HTML/JS Güncellemeleri):**
    - `base.html` navigasyon barına şık ve kurumsal bir dil değiştirme butonu ("TR" veya "EN") eklendi.
    - `base.html`, `index.html`, `create_incident.html` ve `404.html` şablonlarındaki tüm kritik başlık, etiket, buton, uyarı metinleri ve mini DX-Ball oyun içi durum mesajları dinamik çeviri yapısına bağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 18
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Tam Dil Desteği (Full Localization - TR/EN) Kararlılık Güncellemesi:** İngilizce modundayken sayfada tek bir Türkçe kelime bile kalmayacak şekilde sistem optimize edildi.
+2. **translations.py Veritabanı İçeriği Genişletilmesi:** Simülasyon paneli üzerinden üretilen tüm sahte ihbar başlıklarının (Örn: "Logar Kapağı Çökmesi", "Maddi Hasarlı Kaza", "Şüpheli Çanta İhbarı" vb.) ve uzun açıklama metinlerinin birebir kurumsal düzeydeki İngilizce karşılıkları `app/main/translations.py` dosyasına dahil edildi.
+3. **index.html Dinamik Jinja2 Veri Çevirisi:** Ana sayfadaki ihbar listesi kartlarındaki `incident.title` ve `incident.description` alanları ile harita marker veri adasındaki (Data Island) başlık/açıklama alanları küresel `_()` çeviri süzgecinden geçirilerek veri tabanından gelen içeriklerin de seçilen dile göre dinamik olarak lokalize edilmesi sağlandı. Gözden kaçan tüm statik buton ve başlıklar da bu süzgece bağlandı.

@@ -1,6 +1,6 @@
 TRANSLATIONS = {
     'tr': {
-        # navbar
+        # navbar & core
         'brand': 'SafeZone',
         'home': 'Ana Sayfa',
         'report': 'İhbar Bildir',
@@ -11,51 +11,73 @@ TRANSLATIONS = {
         'lang_toggle': 'EN',
         'theme_dark': 'Koyu',
         'theme_light': 'Açık',
+        'SafeZone Uyuyan Bekçi Kedisi': 'SafeZone Uyuyan Bekçi Kedisi',
         
-        # index
+        # index general
         'system_title': 'SafeZone Mahalle Güvenlik ve İhbar Arayüzü',
         'system_status': 'Sistem Durumu: ÇEVRİMİÇİ',
         'total_incident': 'Toplam İhbar',
         'trigger_sim': '🚨 Simülasyon İhbarı Tetikle',
+        '🚨 simülasyon i̇hbarı tetikle': '🚨 Simülasyon İhbarı Tetikle',
         'incident_list_title': 'Mahalle İhbar Listesi',
+        'mahalle i̇hbar listesi': 'Mahalle İhbar Listesi',
         'date': 'Tarih',
         'category': 'Kategori',
         'location': 'Konum',
         'empty_list': 'Gösterilecek ihbar bulunmuyor.',
+        'gösterilecek ihbar bulunmuyor.': 'Gösterilecek ihbar bulunmuyor.',
         'map_title': 'Çankaya Taktiksel Durum Haritası',
+        'çankaya taktiksel durum haritası': 'Çankaya Taktiksel Durum Haritası',
         'prev': 'Önceki',
         'next': 'Sonraki',
+        'toplam i̇hbar': 'Toplam İhbar',
         
         # categories
         'hirsizlik': 'Hırsızlık',
         'supheli': 'Şüpheli Durum',
         'supheli_durum': 'Şüpheli Durum',
+        'supheli durum': 'Şüpheli Durum',
         'kaza': 'Kaza',
         'trafik': 'Trafik',
         'asayis': 'Asayiş',
         'genel': 'Genel',
         'diger': 'Diğer',
         
-        # create incident
+        # create incident page
         'report_new_incident': 'Yeni Olay Bildir',
+        'yeni olay bildir': 'Yeni Olay Bildir',
         'cancel': 'İptal Et',
+        'i̇ptal et': 'İptal Et',
         'incident_title_label': 'Olay Başlığı',
+        'olay başlığı': 'Olay Başlığı',
         'incident_title_placeholder': 'Olay başlığını girin',
+        'olay başlığını girin': 'Olay başlığını girin',
         'incident_desc_label': 'Olay Detayları',
+        'olay detayları': 'Olay Detayları',
         'incident_desc_placeholder': 'Olay detaylarını açıklayın',
+        'olay detaylarını açıklayın': 'Olay detaylarını açıklayın',
         'neighborhood_name_label': 'Mahalle Adı',
+        'mahalle adı': 'Mahalle Adı',
         'neighborhood_name_placeholder': 'Örn: Kızılay, Bahçelievler...',
+        'örn: kızılay, bahçelievler...': 'Örn: Kızılay, Bahçelievler...',
         'lat_label': 'Koordinat Enlemi (Latitude)',
+        'koordinat enlemi (latitude)': 'Koordinat Enlemi (Latitude)',
         'lng_label': 'Koordinat Boylamı (Longitude)',
+        'koordinat boylamı (longitude)': 'Koordinat Boylamı (Longitude)',
         'coord_placeholder': 'Haritadan seçiniz',
+        'haritadan seçiniz': 'Haritadan seçiniz',
         'submit_report': 'Olay Bildir',
+        'olay bildir': 'Olay Bildir',
         'select_loc_label': 'İhbar Konumunu Seçin',
+        'i̇hbar konumunu seçin': 'İhbar Konumunu Seçin',
         'select_loc_help': 'Haritada ihbar noktasına bir kez tıklayın',
         'boundary_violation_title': 'Sınır İhlali:',
+        'sınır i̇hlali:': 'Sınır İhlali:',
         'boundary_violation_text': 'Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!',
         
         # 404 page
         'error_404_title': 'Sınır İhlali - 404',
+        'sınır i̇hlali': 'Sınır İhlali',
         'error_404_header': 'Taktiksel Harita Sınırları Dışındasınız!',
         'error_404_desc': 'Aradığınız koordinat veya güvenli alan veritabanımızda bulunamadı.',
         'game_mode': 'Sistem Güvenlik Duvarı: JÜRİ EĞLENCE MODU',
@@ -64,11 +86,53 @@ TRANSLATIONS = {
         'game_controls_text': 'Klavye Sol/Sağ Ok Tuşları veya Fare ile Raketi hareket ettirin.',
         'game_goal': 'Tüm tuğlaları kırarak sistem ihlalini çözün!',
         'return_secure': 'Güvenli Bölgeye Dön',
+        'güvenli bölgeye dön': 'Güvenli Bölgeye Dön',
         'game_win': 'Sınır İhlali Çözüldü! Ana sayfaya yönlendiriliyorsunuz...',
-        'game_lose': 'Bağlantı Kesildi! Sistem yeniden başlatılıyor...'
+        'game_lose': 'Bağlantı Kesildi! Sistem yeniden başlatılıyor...',
+        
+        # --- DATABASE CONTENT (FAKE INCIDENT SIMULATION DATA) ---
+        # Asayiş / Public Order Titles & Descriptions
+        "Şüpheli Çanta İhbarı": "Şüpheli Çanta İhbarı",
+        "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.": "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.",
+        "Sokak Kavgası": "Sokak Kavgası",
+        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.",
+        "Gürültü ve Taşkınlık": "Gürültü ve Taşkınlık",
+        "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.": "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.",
+        "Market Hırsızlığı Girişimi": "Market Hırsızlığı Girişimi",
+        "Süpermarket çıkışında şüpheli bir şahsın reyondan ürün sakladığı fark edildi, devriye ekipleri müdahale etti.": "Süpermarket çıkışında şüpheli bir şahsın reyondan ürün sakladığı fark edildi, devriye ekipleri müdahale etti.",
+        
+        # Trafik / Traffic Titles & Descriptions
+        "Maddi Hasarlı Kaza": "Maddi Hasarlı Kaza",
+        "İki binek araç kavşakta çarpıştı, yaralı yok. Araçlar yolun tek şeridini kapatıyor.": "İki binek araç kavşakta çarpıştı, yaralı yok. Araçlar yolun tek şeridini kapatıyor.",
+        "Hatalı Park / Yol Kapanması": "Hatalı Park / Yol Kapanması",
+        "Sokak girişine çift sıra park eden bir araç nedeniyle çöp kamyonu ve ambulans geçiş yapamıyor.": "Sokak girişine çift sıra park eden bir araç nedeniyle çöp kamyonu ve ambulans geçiş yapamıyor.",
+        "Sinyalizasyon Arızası": "Sinyalizasyon Arızası",
+        "Ana cadde üzerindeki trafik ışıkları çalışmıyor, trafikte yoğun aksama ve tehlike mevcut.": "Ana cadde üzerindeki trafik ışıkları çalışmıyor, trafikte yoğun aksama ve tehlike mevcut.",
+        "Aşırı Hız ve Yarış": "Aşırı Hız ve Yarış",
+        "Bulvar üzerinde gece yarısı makas atan ve aşırı hız yapan modifiyeli araçlar bildirildi.": "Bulvar üzerinde gece yarısı makas atan ve aşırı hız yapan modifiyeli araçlar bildirildi.",
+        
+        # Şüpheli Durum / Suspicious Activity Titles & Descriptions
+        "Plakasız Araç Gözlemi": "Plakasız Araç Gözlemi",
+        "Ara sokakta 2 saattir park halinde bekleyen plakasız ve camları siyah filmli bir araç ihbar edildi.": "Ara sokakta 2 saattir park halinde bekleyen plakasız ve camları siyah filmli bir araç ihbar edildi.",
+        "Şüpheli Şahıs Devriyesi": "Şüpheli Şahıs Devriyesi",
+        "Apartman girişlerini gözetleyen ve kapıları zorlayan kapüşonlu bir şüpheli şahıs görüldü.": "Apartman girişlerini gözetleyen ve kapıları zorlayan kapüşonlu bir şüpheli şahıs görüldü.",
+        "Boş Binada Hareketlilik": "Boş Binada Hareketlilik",
+        "Kentsel dönüşüm nedeniyle boşaltılan binada gece saatlerinde el feneri ışıkları ve sesler fark edildi.": "Kentsel dönüşüm nedeniyle boşaltılan binada gece saatlerinde el feneri ışıkları ve sesler fark edildi.",
+        "Dolandırıcılık Şüphesi": "Dolandırıcılık Şüphesi",
+        "Mahalle esnafını dolaşarak sahte vakıf adına yardım toplayan şüpheli şahıslar gözlemlendi.": "Mahalle esnafını dolaşarak sahte vakıf adına yardım toplayan şüpheli şahıslar gözlemlendi.",
+        
+        # Genel / General Titles & Descriptions
+        "Logar Kapağı Çökmesi": "Logar Kapağı Çökmesi",
+        "Ana yol üzerinde bulunan logar kapağı çökmüş durumda, sürücüler için ciddi kaza riski var.": "Ana yol üzerinde bulunan logar kapağı çökmüş durumda, sürücüler için ciddi kaza riski var.",
+        "Sokak Lambası Arızası": "Sokak Lambası Arızası",
+        "Park içindeki aydınlatma direklerinin hiçbiri çalışmıyor, bölge tamamen karanlıkta kalmış.": "Park içindeki aydınlatma direklerinin hiçbiri çalışmıyor, bölge tamamen karanlıkta kalmış.",
+        "Su Patlağı / Boru Sızıntısı": "Su Patlağı / Boru Sızıntısı",
+        "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.": "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.",
+        "Sokak Hayvanı Acil Durum": "Sokak Hayvanı Acil Durum",
+        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi."
     },
     'en': {
-        # navbar
+        # navbar & core
         'brand': 'SafeZone',
         'home': 'Home',
         'report': 'Report Incident',
@@ -79,20 +143,26 @@ TRANSLATIONS = {
         'lang_toggle': 'TR',
         'theme_dark': 'Dark',
         'theme_light': 'Light',
+        'SafeZone Uyuyan Bekçi Kedisi': 'SafeZone Sleeping Guard Cat',
         
-        # index
+        # index general
         'system_title': 'SafeZone Neighborhood Security and Incident Interface',
         'system_status': 'System Status: ONLINE',
         'total_incident': 'Total Incidents',
         'trigger_sim': '🚨 Trigger Simulation Incident',
+        '🚨 simülasyon i̇hbarı tetikle': '🚨 Trigger Simulation Incident',
         'incident_list_title': 'Neighborhood Incident List',
+        'mahalle i̇hbar listesi': 'Neighborhood Incident List',
         'date': 'Date',
         'category': 'Category',
         'location': 'Location',
         'empty_list': 'No incidents to display.',
+        'gösterilecek ihbar bulunmuyor.': 'No incidents to display.',
         'map_title': 'Cankaya Tactical Status Map',
+        'çankaya taktiksel durum haritası': 'Cankaya Tactical Status Map',
         'prev': 'Previous',
         'next': 'Next',
+        'toplam i̇hbar': 'Total Incidents',
         
         # categories
         'hirsizlik': 'Theft',
@@ -105,26 +175,41 @@ TRANSLATIONS = {
         'genel': 'General',
         'diger': 'Other',
         
-        # create incident
+        # create incident page
         'report_new_incident': 'Report New Incident',
+        'yeni olay bildir': 'Report New Incident',
         'cancel': 'Cancel',
+        'i̇ptal et': 'Cancel',
         'incident_title_label': 'Incident Title',
+        'olay başlığı': 'Incident Title',
         'incident_title_placeholder': 'Enter incident title',
+        'olay başlığını girin': 'Enter incident title',
         'incident_desc_label': 'Incident Details',
+        'olay detayları': 'Incident Details',
         'incident_desc_placeholder': 'Explain incident details',
+        'olay detaylarını açıklayın': 'Explain incident details',
         'neighborhood_name_label': 'Neighborhood Name',
+        'mahalle adı': 'Neighborhood Name',
         'neighborhood_name_placeholder': 'e.g. Kizilay, Bahcelievler...',
+        'örn: kızılay, bahçelievler...': 'e.g. Kizilay, Bahcelievler...',
         'lat_label': 'Coordinate Latitude',
+        'koordinat enlemi (latitude)': 'Coordinate Latitude',
         'lng_label': 'Coordinate Longitude',
+        'koordinat boylamı (longitude)': 'Coordinate Longitude',
         'coord_placeholder': 'Select from map',
+        'haritadan seçiniz': 'Select from map',
         'submit_report': 'Report Incident',
+        'olay bildir': 'Report Incident',
         'select_loc_label': 'Select Incident Location',
+        'i̇hbar konumunu seçin': 'Select Incident Location',
         'select_loc_help': 'Click once on the map to set the incident location',
         'boundary_violation_title': 'Boundary Violation:',
+        'sınır i̇hlali:': 'Boundary Violation:',
         'boundary_violation_text': 'You can only report incidents within the SafeZone Secure Area (Cankaya) boundaries!',
         
         # 404 page
         'error_404_title': 'Boundary Violation - 404',
+        'sınır i̇hlali': 'Boundary Violation',
         'error_404_header': 'You are Outside the Tactical Map Boundaries!',
         'error_404_desc': 'The coordinates or secure area you are looking for could not be found in our database.',
         'game_mode': 'System Firewall: JURY ENTERTAINMENT MODE',
@@ -133,7 +218,49 @@ TRANSLATIONS = {
         'game_controls_text': 'Use Left/Right Arrow Keys or Mouse to move the paddle.',
         'game_goal': 'Break all bricks to resolve system violation!',
         'return_secure': 'Return to Secure Zone',
+        'güvenli bölgeye dön': 'Return to Secure Zone',
         'game_win': 'System Violation Resolved! Redirecting to home page...',
-        'game_lose': 'Connection Lost! System restarting...'
+        'game_lose': 'Connection Lost! System restarting...',
+        
+        # --- DATABASE CONTENT (FAKE INCIDENT SIMULATION DATA) ---
+        # Asayiş / Public Order Titles & Descriptions
+        "Şüpheli Çanta İhbarı": "Suspicious Bag Report",
+        "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.": "An unattended backpack was detected under the park bench. Establishing a security perimeter is requested.",
+        "Sokak Kavgası": "Street Fight",
+        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "A physical altercation occurred between two groups in the neighborhood. Local residents are disturbed.",
+        "Gürültü ve Taşkınlık": "Noise and Disturbance",
+        "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.": "Loud music and disturbance occurred in the middle of the street late at night. Law enforcement units have been informed.",
+        "Market Hırsızlığı Girişimi": "Attempted Shoplifting",
+        "Süpermarket çıkışında şüpheli bir şahsın reyondan ürün sakladığı fark edildi, devriye ekipleri müdahale etti.": "A suspicious individual was noticed hiding products from the shelf at the supermarket exit, patrol teams intervened.",
+        
+        # Trafik / Traffic Titles & Descriptions
+        "Maddi Hasarlı Kaza": "Accident with Property Damage",
+        "İki binek araç kavşakta çarpıştı, yaralı yok. Araçlar yolun tek şeridini kapatıyor.": "Two passenger vehicles collided at the intersection, no injuries. The vehicles are blocking one lane of the road.",
+        "Hatalı Park / Yol Kapanması": "Wrongful Parking / Road Blockage",
+        "Sokak girişine çift sıra park eden bir araç nedeniyle çöp kamyonu ve ambulans geçiş yapamıyor.": "A garbage truck and an ambulance cannot pass due to a double-parked vehicle at the street entrance.",
+        "Sinyalizasyon Arızası": "Traffic Signal Failure",
+        "Ana cadde üzerindeki trafik ışıkları çalışmıyor, trafikte yoğun aksama ve tehlike mevcut.": "Traffic lights on the main avenue are not working, severe disruption and danger in traffic.",
+        "Aşırı Hız ve Yarış": "Speeding and Racing",
+        "Bulvar üzerinde gece yarısı makas atan ve aşırı hız yapan modifiyeli araçlar bildirildi.": "Modified vehicles speeding and tailgating on the boulevard at midnight were reported.",
+        
+        # Şüpheli Durum / Suspicious Activity Titles & Descriptions
+        "Plakasız Araç Gözlemi": "Unlicensed Vehicle Observation",
+        "Ara sokakta 2 saattir park halinde bekleyen plakasız ve camları siyah filmli bir araç ihbar edildi.": "An unlicensed vehicle with tinted windows parked in the side street for 2 hours was reported.",
+        "Şüpheli Şahıs Devriyesi": "Suspicious Person Patrol",
+        "Apartman girişlerini gözetleyen ve kapıları zorlayan kapüşonlu bir şüpheli şahıs görüldü.": "A hooded suspicious individual was seen observing apartment entrances and forcing doors.",
+        "Boş Binada Hareketlilik": "Activity in Abandoned Building",
+        "Kentsel dönüşüm nedeniyle boşaltılan binada gece saatlerinde el feneri ışıkları ve sesler fark edildi.": "Flashlight beams and noises were noticed in the building evacuated due to urban transformation at night.",
+        "Dolandırıcılık Şüphesi": "Suspicion of Fraud",
+        "Mahalle esnafını dolaşarak sahte vakıf adına yardım toplayan şüpheli şahıslar gözlemlendi.": "Suspicious individuals visiting local shopkeepers to collect donations on behalf of a fake charity were observed.",
+        
+        # Genel / General Titles & Descriptions
+        "Logar Kapağı Çökmesi": "Collapsed Manhole Cover",
+        "Ana yol üzerinde bulunan logar kapağı çökmüş durumda, sürücüler için ciddi kaza riski var.": "The manhole cover on the main road is collapsed, posing a serious accident risk for drivers.",
+        "Sokak Lambası Arızası": "Street Light Failure",
+        "Park içindeki aydınlatma direklerinin hiçbiri çalışmıyor, bölge tamamen karanlıkta kalmış.": "None of the light poles inside the park are working, leaving the area completely in darkness.",
+        "Su Patlağı / Boru Sızıntısı": "Water Burst / Pipe Leak",
+        "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.": "There is a heavy water leak from the network pipe near the sidewalk, the road is about to flood.",
+        "Sokak Hayvanı Acil Durum": "Stray Animal Emergency",
+        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Municipal teams were contacted for an injured and weak stray dog lying at the street corner."
     }
 }

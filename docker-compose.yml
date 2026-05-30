@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: safezone_app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+      - SECRET_KEY=safezone-super-secret-key-2026
+      - DATABASE_URL=sqlite:///safezone.db
+    volumes:
+      - ./safezone.db:/app/safezone.db

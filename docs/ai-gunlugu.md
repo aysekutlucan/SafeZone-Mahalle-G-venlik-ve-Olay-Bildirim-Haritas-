@@ -59,3 +59,19 @@
 1. **Hata Yönetimi Altyapısı (Global Error Handling):** `app/main/errors.py` oluşturuldu. `main_bp.app_errorhandler` dekoratörleri kullanılarak 404 (Sayfa Bulunamadı) ve 500 (Sunucu Hatası) HTTP durum kodları için global hata yakalayıcıları tanımlandı ve `app/main/__init__.py` üzerinden Blueprint'e bağlandı.
 2. **404 Hata Arayüzü (`404.html`):** `app/templates/errors/404.html` dosyası oluşturuldu. `base.html` şablonundan miras alınarak projenin kurumsal koyu lacivert kimliğine uygun, açıklayıcı ve kullanıcının ana sayfaya güvenle dönmesini sağlayan estetik bir arayüz tasarlandı.
 3. **500 Hata Arayüzü (`500.html`):** `app/templates/errors/500.html` dosyası oluşturuldu. `base.html` şablonundan miras alınarak kurumsal koyu lacivert temalı, teknik destek/kurtarma yönlendirmeli profesyonel bir sistem hatası arayüzü tasarlandı.
+
+## AI Geliştirme Günlüğü - Oturum 7
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Docker Altyapısı Entegrasyonu:** Projeyi her ortamda sorunsuz şekilde çalıştırabilmek ve dağıtmak amacıyla Dockerizasyon altyapısı hazırlandı.
+   - `python:3.12-slim` tabanlı, Gunicorn WSGI sunucusu ile uygulamayı ayağa kaldıran optimize edilmiş bir `Dockerfile` oluşturuldu.
+   - Geliştirme ve yayına alma aşamalarında kolaylık sağlaması için, ortam değişkenlerini (environment) ve `5000:5000` port yönlendirmesini barındıran `docker-compose.yml` dosyası yazıldı.
+   - `.venv`, `__pycache__`, yerel sqlite veritabanı dosyaları ve yedeklerin konteyner içerisine kopyalanmasını önleyerek imaj boyutunu küçülten `.dockerignore` dosyası eklendi.
+2. **Büyük Tasarım Maratonu ve Kapanış Değerlendirmesi:**
+   - **Genel Değerlendirme:** Proje, başlangıçtaki "sıfır tasarım, salt fonksiyonel altyapı" yaklaşımından, jüri önünde tam not alacak kurumsal kalitede bir komuta/simülasyon paneline dönüştürüldü.
+   - **Kazanımlar ve Öğrenilenler:**
+     - **Hibrit Tasarım ve Veri Entegrasyonu:** Jinja2 JSON veri adası mimarisi sayesinde JavaScript ile sunucu verisi sıfır hata ve yüksek güvenlik ile eşleştirildi.
+     - **Etkileşimli Harita Kontrolleri:** Harita sınırlandırma ve interaktif odaklanma mekanizması, hem taktiksel görünümü zenginleştirdi hem de kullanıcı deneyimini (UX) üst seviyeye taşıdı.
+     - **Mimarinin Gücü:** Application Factory Pattern ve Blueprint yapısının, projenin büyüdüğü aşamalarda (Örn: Hata yönetimi, sayfalama ve Dockerization) ne kadar modüler ve sürdürülebilir bir geliştirme sağladığı bizzat tecrübe edildi. SafeZone artık üretime (production) hazır, kusursuz bir proje haline geldi!

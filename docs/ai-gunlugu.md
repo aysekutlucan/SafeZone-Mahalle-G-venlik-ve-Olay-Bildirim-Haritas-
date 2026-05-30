@@ -130,3 +130,15 @@
 2. **HTML5 Canvas ve Dinamik Temalı Tasarım:** Sayfaya 400x300px boyutlarında şık bir `<canvas>` alanı yerleştirildi. Canvas'ın arka planı ve kenarlıkları sistem değişkenlerimize (`var(--card-bg)`, `var(--accent-color)`) bağlanarak, açık modda toz pembe/krem, koyu modda ise parlayan neon su yeşili kenarlıklı siyah renkte açılması sağlandı.
 3. **Vanilla JS Oyun Algoritması:** Top fiziği, klavye/fare dinleyicileriyle kontrol edilen raket (paddle), çarptığında kırılan renkli tuğla (brick) dizilimleri saf JavaScript ile kodlandı.
 4. **Akıllı Yönlendirme (Auto-Redirect):** Oyun sonlandığında (Kazanma veya Kaybetme durumunda) canvas ekranında şık bir "Sınır İhlali Çözüldü" veya "Bağlantı Kesildi" mesajı basılması ve 3 saniye sonra kullanıcının otomatik olarak güvenli alana (Ana Sayfa) yönlendirilmesi sağlandı. Aynı zamanda yedek olarak alttaki "Güvenli Bölgeye Dön" butonu aktif bırakıldı.
+
+## AI Geliştirme Günlüğü - Oturum 13
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Haritadan Tıklama ile Koordinat Alma (UX Modernizasyonu):** `app/templates/main/create_incident.html` dosyası tamamen yenilenerek form ve harita yan yana gelecek şekilde modern bir siber konsol düzenine kavuşturuldu.
+2. **Readonly Koordinat Alanları:** Enlem (latitude) ve boylam (longitude) girdi alanları `readonly` yapılarak el ile veri girişi kapatıldı, tasarımsal olarak arka plana itilerek form bütünlüğü sağlandı.
+3. **Çankaya Coğrafi Sınır Güvenlik Duvarı:** Leaflet harita tıklama dinleyicisine (`map.on("click")`) koordinat filtreleme mantığı eklendi:
+   - Seçilen konum Çankaya simülasyon sınırları (`39.8800` - `39.9500` enlem, `32.8000` - `32.8800` boylam) içerisindeyse enlem/boylam alanları otomatik doldurulur ve haritaya yeşil bir "Seçilen Konum" markeri yerleştirilir.
+   - Sınırlar dışına tıklanırsa, form güncellenmez ve ekranda şık, parlayan Bootstrap Toast/Alert benzeri özel bir *"Sınır İhlali: Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!"* uyarısı fırlatılır.
+4. **Dinamik Harita Temaları:** Olay bildirme haritası da temaya göre otomatik olarak değişecek şekilde `themeChanged` olay dinleyicisi ile CartoDB Voyager ve CartoDB Dark Matter katmanlarıyla senkronize edildi.

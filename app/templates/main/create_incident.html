@@ -1,90 +1,238 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <!-- Leaflet CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    .console-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+    }
+    .console-header {
+        border-bottom: 2px solid var(--card-border);
+        padding-bottom: 1rem;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+    #map {
+        width: 100%;
+        height: 480px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--card-border);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* Glowing select marker styling matching index cats */
+    .cat-marker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50%;
+        background-color: var(--card-bg);
+        border: 2px solid var(--accent-color);
+        box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .cat-marker i {
+        font-size: 1.1rem;
+        color: var(--accent-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .cat-yesil {
+        border-color: #00fa9a !important;
+        box-shadow: 0 0 12px rgba(0, 250, 154, 0.6) !important;
+        color: #00fa9a !important;
+    }
+    .cat-yesil i {
+        color: #00fa9a !important;
+    }
+    
+    /* Koyu modda haritayı taktiksel tona uydurmak için filtre */
+    [data-theme="dark"] .leaflet-layer {
+        filter: hue-rotate(200deg) saturate(1.4) brightness(0.85) contrast(1.2) !important;
+    }
+</style>
 
-    <h2>Yeni Olay Bildir</h2>
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        
-        <div>
-            {{ form.title.label }}<br>
-            {{ form.title() }}
-            {% for error in form.title.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.description.label }}<br>
-            {{ form.description() }}
-            {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.category.label }}<br>
-            {{ form.category() }}
-            {% for error in form.category.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.neighborhood_name.label }}<br>
-            {{ form.neighborhood_name() }}
-            {% for error in form.neighborhood_name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        
-        <div id="map" style="width: 100%; height: 400px; margin-bottom: 15px;"></div>
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-        <div>
-            {{ form.latitude.label }}<br>
-            {{ form.latitude() }}
-            {% for error in form.latitude.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.longitude.label }}<br>
-            {{ form.longitude() }}
-            {% for error in form.longitude.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <br>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
+<div class="row justify-content-center py-4">
+    <div class="col-lg-11">
+        <div class="console-card p-4 p-md-5">
+            <div class="console-header mb-4 d-flex justify-content-between align-items-center">
+                <h2 class="h3 mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-shield-plus text-primary" style="color: var(--accent-color) !important;"></i>
+                    Yeni Olay Bildir
+                </h2>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">İptal Et</a>
+            </div>
 
-    <script>
-        var map = L.map('map').setView([39.92077, 32.85411], 6);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <!-- Sınır İhlali Hata Alert -->
+                <div id="boundary-alert" class="alert alert-danger d-none mb-4 animate-pulse" style="border-left: 5px solid #ff3366; background-color: var(--card-bg); border-color: var(--card-border); color: #ff3366; box-shadow: 0 4px 15px rgba(255, 51, 102, 0.15);">
+                    <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                    <strong>Sınır İhlali:</strong> Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left Form Panel (col-lg-6) -->
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
+                            {{ form.title(class="form-control bg-dark text-white border-secondary", placeholder="Olay başlığını girin") }}
+                            {% for error in form.title.errors %}
+                                <div class="text-danger small mt-1">[{{ error }}]</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
+                            {{ form.description(class="form-control bg-dark text-white border-secondary", rows="4", placeholder="Olay detaylarını açıklayın") }}
+                            {% for error in form.description.errors %}
+                                <div class="text-danger small mt-1">[{{ error }}]</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.category.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
+                                {{ form.category(class="form-select bg-dark text-white border-secondary form-control") }}
+                                {% for error in form.category.errors %}
+                                    <div class="text-danger small mt-1">[{{ error }}]</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.neighborhood_name.label(class="form-label text-light fw-medium", style="color: var(--text-color) !important;") }}
+                                {{ form.neighborhood_name(class="form-control bg-dark text-white border-secondary", placeholder="Mahalle adı") }}
+                                {% for error in form.neighborhood_name.errors %}
+                                    <div class="text-danger small mt-1">[{{ error }}]</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Readonly Coords Fields -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.latitude.label(class="form-label text-muted fw-medium small") }}
+                                {{ form.latitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder="Haritadan seçiniz") }}
+                                {% for error in form.latitude.errors %}
+                                    <div class="text-danger small mt-1">[{{ error }}]</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.longitude.label(class="form-label text-muted fw-medium small") }}
+                                {{ form.longitude(class="form-control text-muted border-secondary", readonly="readonly", style="background-color: var(--navbar-bg) !important; cursor: not-allowed;", placeholder="Haritadan seçiniz") }}
+                                {% for error in form.longitude.errors %}
+                                    <div class="text-danger small mt-1">[{{ error }}]</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg rounded-pill fw-bold py-2 shadow-sm") }}
+                        </div>
+                    </div>
+
+                    <!-- Right Map Panel (col-lg-6) -->
+                    <div class="col-lg-6">
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <label class="form-label text-light fw-medium mb-0" style="color: var(--text-color) !important;">
+                                <i class="bi bi-map me-1 text-info" style="color: var(--accent-color) !important;"></i>
+                                İhbar Konumunu Seçin
+                            </label>
+                            <small class="text-muted">Haritada ihbar noktasına bir kez tıklayın</small>
+                        </div>
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bounds for Çankaya Ankara
+    const southWest = L.latLng(39.8800, 32.8000);
+    const northEast = L.latLng(39.9500, 32.8800);
+    const bounds = L.latLngBounds(southWest, northEast);
+
+    const map = L.map('map', {
+        center: [39.9207, 32.8541], // Ankara Merkez
+        zoom: 14,
+        minZoom: 13,
+        maxBounds: bounds,
+        maxBoundsViscosity: 1.0
+    });
+
+    // Dynamic theme map switcher
+    let tileLayer;
+    function setMapTiles(theme) {
+        if (tileLayer) {
+            map.removeLayer(tileLayer);
+        }
+        const tileUrl = theme === 'light'
+            ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+            : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+        tileLayer = L.tileLayer(tileUrl, {
             maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(map);
+    }
+    
+    const initialTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    setMapTiles(initialTheme);
+    window.addEventListener('themeChanged', () => {
+        setMapTiles(document.documentElement.getAttribute('data-theme'));
+    });
 
-        var marker;
+    var marker;
 
-        map.on('click', function(e) {
-            var lat = e.latlng.lat.toFixed(6);
-            var lng = e.latlng.lng.toFixed(6);
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
 
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
+        const alertBox = document.getElementById('boundary-alert');
+
+        // Boundary restriction check
+        if (lat >= 39.8800 && lat <= 39.9500 && lng >= 32.8000 && lng <= 32.8800) {
+            alertBox.classList.add('d-none');
+            
+            document.getElementById('latitude').value = lat.toFixed(6);
+            document.getElementById('longitude').value = lng.toFixed(6);
 
             if (marker) {
                 map.removeLayer(marker);
             }
-            marker = L.marker([lat, lng]).addTo(map);
-        });
-    </script>
+            
+            // Create a custom glowing location marker
+            const selectIcon = L.divIcon({
+                html: `<div class="cat-marker cat-yesil"><i class="bi bi-geo-alt-fill"></i></div>`,
+                className: 'custom-cat-icon',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+            
+            marker = L.marker([lat, lng], { icon: selectIcon }).addTo(map);
+        } else {
+            // Sınırlar dışında - Hata göster
+            alertBox.classList.remove('d-none');
+            
+            // Sıfırla
+            document.getElementById('latitude').value = "";
+            document.getElementById('longitude').value = "";
+
+            if (marker) {
+                map.removeLayer(marker);
+                marker = null;
+            }
+        }
+    });
+</script>
 {% endblock %}

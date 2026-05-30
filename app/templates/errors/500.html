@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .error-container {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .error-card {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+    .error-icon {
+        font-size: 5rem;
+        color: #ef4444; /* System Danger Red */
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.4));
+    }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+    }
+    .animate-pulse-custom {
+        animation: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-icon animate-pulse-custom">
+            <i class="bi bi-cpu-fill"></i>
+        </div>
+        <h1 class="display-5 fw-bold text-white mb-2">Sistem Hatası</h1>
+        <h2 class="h5 text-muted mb-4">Hata Kodu: 500 - Sunucu Hatası</h2>
+        <p class="text-secondary mb-4" style="line-height: 1.6;">
+            SafeZone veri sunucularında beklenmedik bir taktiksel veri kesintisi yaşandı. Güvenlik protokolleri devreye girdi, lütfen daha sonra tekrar deneyin veya ana sayfaya dönün.
+        </p>
+        <div class="d-grid">
+            <a href="{{ url_for('main.index') }}" class="btn btn-danger btn-lg rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                Paneli Yeniden Başlat (Ana Sayfa)
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

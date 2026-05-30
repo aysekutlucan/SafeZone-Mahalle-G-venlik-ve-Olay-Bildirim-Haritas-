@@ -50,3 +50,12 @@
    - Üst tarafa dinamik ihbar sayısı ve sistem durumu rozetleri içeren kurumsal bir karşılama bandı yerleştirildi.
 3. **İnteraktif Harita Odaklanma:** Sol listedeki ihbar kartlarına tıklandığında haritanın pürüzsüz animasyonla o koordinata odaklanmasını ve marker balonunun (popup) otomatik açılmasını sağlayan dinamik JavaScript mekanizması yazıldı.
 4. **Sayfalama (Pagination) Altyapısı:** Ana sayfa ihbar listesinde `Flask-SQLAlchemy`'nin `paginate()` yöntemi kullanılarak sayfa başına 5 ihbar sınırı getirildi. Sol ihbar listesinin altına kurumsal temayla uyumlu Bootstrap 5 sayfalama navigasyonu entegre edilerek hem backend hem frontend tarafında sayfalama gereksinimi tamamlandı.
+
+## AI Geliştirme Günlüğü - Oturum 6
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Hata Yönetimi Altyapısı (Global Error Handling):** `app/main/errors.py` oluşturuldu. `main_bp.app_errorhandler` dekoratörleri kullanılarak 404 (Sayfa Bulunamadı) ve 500 (Sunucu Hatası) HTTP durum kodları için global hata yakalayıcıları tanımlandı ve `app/main/__init__.py` üzerinden Blueprint'e bağlandı.
+2. **404 Hata Arayüzü (`404.html`):** `app/templates/errors/404.html` dosyası oluşturuldu. `base.html` şablonundan miras alınarak projenin kurumsal koyu lacivert kimliğine uygun, açıklayıcı ve kullanıcının ana sayfaya güvenle dönmesini sağlayan estetik bir arayüz tasarlandı.
+3. **500 Hata Arayüzü (`500.html`):** `app/templates/errors/500.html` dosyası oluşturuldu. `base.html` şablonundan miras alınarak kurumsal koyu lacivert temalı, teknik destek/kurtarma yönlendirmeli profesyonel bir sistem hatası arayüzü tasarlandı.

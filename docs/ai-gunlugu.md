@@ -197,3 +197,12 @@
 ### Yapılan İşlemler:
 1. **Sahiplik Tabanlı Güvenli İhbar Silme (Ownership-based Deletion) Altyapısı:** Olay bildirimlerinin kaldırılması işlemi strictly sahiplik kuralına bağlandı. `app/main/routes.py` içine `@login_required` korumalı ve POST isteklerini dinleyen `/incident/delete/<int:id>` rotası yazıldı. Rota tetiklendiğinde veritabanından çekilen ihbarın `incident.user_id == current_user.id` kuralı kontrol edilir. Eşleşmiyorsa silme işlemi durdurulup 403 (Yetkisiz Erişim) hatası fırlatılarak sıkı bir backend güvenlik koruması sağlandı.
 2. **Kullanıcı Arayüzü (UI/UX) Sahiplik Koruması:** `index.html` dosyası güncellenerek sol ihbar listesi kartlarına ve haritadaki kedi marker pop-up balonlarına silme butonları yerleştirildi. Bu butonların görüntülenmesi hem Jinja2 şablonunda (`{% if incident.user_id == current_user.id %}`) hem de haritadaki Javascript marker pop-up'larında kullanıcının aktif kimliğiyle eşleştirilerek kısıtlandı. Böylece kullanıcılar sadece kendi oluşturdukları ihbarları görebilir ve silebilir duruma getirildi. Silme işlemine dile duyarlı ("TR"/"EN") silme onay pencereleri ve flash bildirimleri entegre edildi.
+
+## AI Geliştirme Günlüğü - Oturum 20
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **İhbar Kartlarına Dikey Üç Nokta Menüsü (Bootstrap Dropdown):** Kartların üzerindeki çıplak kırmızı çöp kutusu kaldırılarak yerine, tıklama olaylarını kart geneline yaymayan (`event.stopPropagation()`) ve Bootstrap Dropdown altyapısını kullanan şık bir dikey üç nokta simgeli (`bi-three-dots-vertical`) aksiyon menüsü entegre edildi. Bu menü yalnızca ihbar sahibi kullanıcılar için render edilir ve açılan panelde dile duyarlı "Sil" / "Delete" seçeneğini sunar.
+2. **Olay Detay Paneli (Bootstrap Modal):** Kullanıcı sol listedeki ihbar kartlarına tıkladığında hem haritada o konuma uçan hem de olayın tüm detaylarını (Başlık, kategori renkli rozeti, mahalle, enlem/boylam, ihbarı yapan kullanıcı, oluşturulma tarihi/saati ve geniş açıklama) sunan premium bir detay modalı (`#incidentDetailModal`) açılacak şekilde JS & HTML mekanizması inşa edildi.
+3. **Modal Çoklu Dil Entegrasyonu (TR/EN Localization):** Modal içerisindeki tüm sabit başlıklar (Olay Detayı, Kategori, Mahalle, Tarih vb.) ve dinamik veriler, `translations.py` üzerinden geçirilerek dil durumuna göre %100 lokalize şekilde görüntülendi. Koyu modda parlayan neon su yeşili kenarlıklı, açık modda ise krem renginde şık kart tasarımına uygun kurumsal tema senkronizasyonu Modal bileşenine de yansıtıldı.

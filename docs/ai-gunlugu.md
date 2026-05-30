@@ -189,3 +189,11 @@
 1. **Tam Dil Desteği (Full Localization - TR/EN) Kararlılık Güncellemesi:** İngilizce modundayken sayfada tek bir Türkçe kelime bile kalmayacak şekilde sistem optimize edildi.
 2. **translations.py Veritabanı İçeriği Genişletilmesi:** Simülasyon paneli üzerinden üretilen tüm sahte ihbar başlıklarının (Örn: "Logar Kapağı Çökmesi", "Maddi Hasarlı Kaza", "Şüpheli Çanta İhbarı" vb.) ve uzun açıklama metinlerinin birebir kurumsal düzeydeki İngilizce karşılıkları `app/main/translations.py` dosyasına dahil edildi.
 3. **index.html Dinamik Jinja2 Veri Çevirisi:** Ana sayfadaki ihbar listesi kartlarındaki `incident.title` ve `incident.description` alanları ile harita marker veri adasındaki (Data Island) başlık/açıklama alanları küresel `_()` çeviri süzgecinden geçirilerek veri tabanından gelen içeriklerin de seçilen dile göre dinamik olarak lokalize edilmesi sağlandı. Gözden kaçan tüm statik buton ve başlıklar da bu süzgece bağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 19
+**Tarih:** 30.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Sahiplik Tabanlı Güvenli İhbar Silme (Ownership-based Deletion) Altyapısı:** Olay bildirimlerinin kaldırılması işlemi strictly sahiplik kuralına bağlandı. `app/main/routes.py` içine `@login_required` korumalı ve POST isteklerini dinleyen `/incident/delete/<int:id>` rotası yazıldı. Rota tetiklendiğinde veritabanından çekilen ihbarın `incident.user_id == current_user.id` kuralı kontrol edilir. Eşleşmiyorsa silme işlemi durdurulup 403 (Yetkisiz Erişim) hatası fırlatılarak sıkı bir backend güvenlik koruması sağlandı.
+2. **Kullanıcı Arayüzü (UI/UX) Sahiplik Koruması:** `index.html` dosyası güncellenerek sol ihbar listesi kartlarına ve haritadaki kedi marker pop-up balonlarına silme butonları yerleştirildi. Bu butonların görüntülenmesi hem Jinja2 şablonunda (`{% if incident.user_id == current_user.id %}`) hem de haritadaki Javascript marker pop-up'larında kullanıcının aktif kimliğiyle eşleştirilerek kısıtlandı. Böylece kullanıcılar sadece kendi oluşturdukları ihbarları görebilir ve silebilir duruma getirildi. Silme işlemine dile duyarlı ("TR"/"EN") silme onay pencereleri ve flash bildirimleri entegre edildi.

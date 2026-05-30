@@ -144,3 +144,18 @@ def inject_translations():
         return key
 
     return dict(_=translate, active_lang=lang)
+
+@main_bp.route('/incident/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_incident(id):
+    from flask import abort, session
+    incident = Incident.query.get_or_404(id)
+    if incident.user_id != current_user.id:
+        abort(403)
+    db.session.delete(incident)
+    db.session.commit()
+    
+    lang = session.get('lang', 'tr')
+    msg = 'Incident successfully removed!' if lang == 'en' else 'İhbar başarıyla kaldırıldı!'
+    flash(msg, 'success')
+    return redirect(url_for('main.index'))

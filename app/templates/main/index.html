@@ -286,7 +286,16 @@
                             <p class="incident-card-desc mb-2">{{ _(incident.description) }}</p>
                             <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem; color: var(--text-muted) !important;">
                                 <span><i class="bi bi-geo-alt me-1"></i>{{ incident.neighborhood_name }}</span>
-                                <span><i class="bi bi-clock me-1"></i>{{ incident.created_at.strftime('%d.%m %H:%M') }}</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span><i class="bi bi-clock me-1"></i>{{ incident.created_at.strftime('%d.%m %H:%M') }}</span>
+                                    {% if current_user.is_authenticated and incident.user_id == current_user.id %}
+                                        <form action="{{ url_for('main.delete_incident', id=incident.id) }}" method="POST" class="d-inline" onclick="event.stopPropagation();">
+                                            <button type="submit" class="btn btn-link text-danger p-0 border-0" title="{{ _('İhbarı Kaldır') }}" onclick="return confirm('{{ _('Bu ihbarı silmek istediğinizden emin misiniz?') }}');">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -356,7 +365,8 @@
                 "category": "{{ _(incident.category) | replace('\"', '\\\"') }}",
                 "latitude": "{{ incident.latitude }}",
                 "longitude": "{{ incident.longitude }}",
-                "description": "{{ _(incident.description) | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}"
+                "description": "{{ _(incident.description) | replace('\"', '\\\"') | replace('\n', '\\n') | replace('\r', '') }}",
+                "user_id": {{ incident.user_id }}
             }{% if not loop.last %},{% endif %}
             {% endfor %}
         ]
@@ -430,16 +440,36 @@
             });
         }
 
+        const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
+
         incidentsData.forEach((incident) => {
             if (incident.latitude && incident.longitude && incident.latitude !== "None" && incident.longitude !== "None") {
                 var lat = parseFloat(incident.latitude);
                 var lng = parseFloat(incident.longitude);
                 var marker = L.marker([lat, lng], { icon: getCatIcon(incident.category) }).addTo(map);
+                
+                let deleteFormHtml = "";
+                if (currentUserId && parseInt(incident.user_id) === currentUserId) {
+                    const isEn = '{{ active_lang }}' === 'en';
+                    const confirmMsg = isEn ? 'Are you sure you want to delete this incident?' : 'Bu ihbarı silmek istediğinizden emin misiniz?';
+                    const linkText = isEn ? 'Remove Incident' : 'İhbarı Kaldır';
+                    const deleteUrl = "{{ url_for('main.delete_incident', id=0) }}".replace('0', incident.id);
+                    deleteFormHtml = `
+                        <hr style="margin: 8px 0; border-top: 1px solid var(--card-border);">
+                        <form action="${deleteUrl}" method="POST" style="margin: 0;" onsubmit="return confirm('${confirmMsg}');">
+                            <button type="submit" class="btn btn-link text-danger p-0 border-0 font-weight-bold" style="font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                                <i class="bi bi-trash3-fill"></i> ${linkText}
+                            </button>
+                        </form>
+                    `;
+                }
+
                 marker.bindPopup(`
                     <div style="font-family: 'Roboto', sans-serif; min-width: 180px;">
                         <h6 style="margin-bottom: 5px; font-weight: 700; color: var(--text-color);">${incident.title}</h6>
                         <span style="font-size: 0.75rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: var(--accent-color); color: var(--btn-primary-text); display: inline-block; margin-bottom: 8px;">${incident.category}</span>
                         <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${incident.description}</p>
+                        ${deleteFormHtml}
                     </div>
                 `);
                 markers[incident.id] = marker;

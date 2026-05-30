@@ -75,6 +75,10 @@ TRANSLATIONS = {
         'sınır i̇hlali:': 'Sınır İhlali:',
         'boundary_violation_text': 'Sadece SafeZone Güvenli Bölge (Çankaya) sınırları içerisine ihbar bırakabilirsiniz!',
         
+        # Deletion
+        'i̇hbarı kaldır': 'İhbarı Kaldır',
+        'bu ihbarı silmek istediğinizden emin misiniz?': 'Bu ihbarı silmek istediğinizden emin misiniz?',
+        
         # 404 page
         'error_404_title': 'Sınır İhlali - 404',
         'sınır i̇hlali': 'Sınır İhlali',
@@ -95,7 +99,7 @@ TRANSLATIONS = {
         "Şüpheli Çanta İhbarı": "Şüpheli Çanta İhbarı",
         "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.": "Park bankının altında sahipsiz bir sırt çantası tespit edildi. Güvenlik çemberi oluşturulması talep ediliyor.",
         "Sokak Kavgası": "Sokak Kavgası",
-        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.",
+        "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursuz.": "Mahalle arasında iki grup arasında fiziksel arbede yaşandı. Çevre sakinleri huzursur.",
         "Gürültü ve Taşkınlık": "Gürültü ve Taşkınlık",
         "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.": "Gece geç saatlerde sokak ortasında yüksek sesli müzik ve taşkınlık yapıldı. Kolluk birimleri bilgilendirildi.",
         "Market Hırsızlığı Girişimi": "Market Hırsızlığı Girişimi",
@@ -206,6 +210,10 @@ TRANSLATIONS = {
         'boundary_violation_title': 'Boundary Violation:',
         'sınır i̇hlali:': 'Boundary Violation:',
         'boundary_violation_text': 'You can only report incidents within the SafeZone Secure Area (Cankaya) boundaries!',
+        
+        # Deletion
+        'i̇hbarı kaldır': 'Remove Incident',
+        'bu ihbarı silmek istediğinizden emin misiniz?': 'Are you sure you want to delete this incident?',
         
         # 404 page
         'error_404_title': 'Boundary Violation - 404',

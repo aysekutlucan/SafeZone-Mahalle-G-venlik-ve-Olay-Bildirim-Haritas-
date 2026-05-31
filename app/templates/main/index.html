@@ -274,6 +274,32 @@
             transform: scale(1.02);
             filter: brightness(1.1);
         }
+
+        /* Responsive border and layout for analytics panel */
+        .analytics-separator {
+            border-top: 1px solid var(--card-border);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .analytics-separator {
+                border-top: none;
+                border-left: 1px solid var(--card-border);
+                padding-top: 0;
+                padding-left: 1.5rem;
+                margin-top: 0;
+            }
+        }
+        .analytics-stat-card {
+            background-color: var(--navbar-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .analytics-stat-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
     </style>
 
     <!-- Upper Welcome Banner -->
@@ -436,8 +462,79 @@
                 <small class="text-muted">{% if active_lang == 'en' %}Locked Boundary Simulation{% else %}Kilitli Sınır Simülasyonu{% endif %}</small>
             </div>
             
-            <div class="map-wrapper">
+            <div class="map-wrapper mb-4">
                 <div id="map"></div>
+            </div>
+
+            <!-- Dynamic Incident Analytics Panel -->
+            <div class="card mb-3 shadow-sm border-secondary-subtle" style="background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; transition: border-color 0.3s ease;">
+                <div class="card-header d-flex align-items-center justify-content-between py-3" style="border-bottom: 1px solid var(--card-border); background: transparent;">
+                    <h5 class="m-0 fw-bold d-flex align-items-center gap-2" style="color: var(--text-color);">
+                        <i class="bi bi-bar-chart-line text-info" style="color: var(--accent-color) !important;"></i>
+                        {{ _('İhbar İstatistikleri') }}
+                    </h5>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 0.8rem; background-color: var(--navbar-bg) !important; color: var(--accent-color) !important; border-color: var(--accent-color) !important;">
+                        <i class="bi bi-shield-check me-1 animate-pulse"></i>{% if active_lang == 'en' %}Realtime{% else %}Canlı{% endif %}
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4 align-items-stretch">
+                        <!-- Stats numbers -->
+                        <div class="col-md-5 d-flex flex-column gap-3 justify-content-center">
+                            <div class="p-3 analytics-stat-card">
+                                <small class="text-muted d-block mb-1">{% if active_lang == 'en' %}Total Incident Count{% else %}Toplam İhbar Sayısı{% endif %}</small>
+                                <h3 class="fw-bold m-0 text-white d-flex align-items-center gap-2" style="color: var(--text-color) !important;">
+                                    <i class="bi bi-broadcast text-danger animate-pulse"></i>
+                                    {{ stats.total }}
+                                </h3>
+                            </div>
+                            <div class="p-3 analytics-stat-card">
+                                <small class="text-muted d-block mb-1">{{ _('En Yoğun Mahalle') }}</small>
+                                <h4 class="fw-bold m-0 text-info d-flex align-items-center gap-2" style="color: var(--accent-color) !important;">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    {{ stats.most_intensive_neighborhood }}
+                                </h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bars -->
+                        <div class="col-md-7 analytics-separator">
+                            <h6 class="fw-bold mb-3" style="color: var(--text-color);">
+                                <i class="bi bi-pie-chart me-1" style="color: var(--accent-color);"></i>
+                                {{ _('Kategorilere Göre Dağılım') }}
+                            </h6>
+                            
+                            {% if stats.categories %}
+                                <div class="d-flex flex-column gap-3">
+                                    {% for cat in stats.categories %}
+                                        {% if cat.name in ['Asayiş', 'Hırsızlık', 'Saldırı', 'Gasp'] %}
+                                            {% set bar_color = 'bg-danger' %}
+                                        {% elif cat.name in ['Trafik', 'Kaza', 'Yol Kapanması'] %}
+                                            {% set bar_color = 'bg-warning text-dark' %}
+                                        {% elif cat.name in ['Şüpheli Durum', 'Kayıp'] %}
+                                            {% set bar_color = 'bg-info text-dark' %}
+                                        {% else %}
+                                            {% set bar_color = 'bg-success' %}
+                                        {% endif %}
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1" style="font-size: 0.85rem;">
+                                                <span class="fw-semibold" style="color: var(--text-color);">{{ _(cat.name) }}</span>
+                                                <span class="text-muted">{{ cat.count }} ({{ cat.percentage }}%)</span>
+                                            </div>
+                                            <div class="progress" style="height: 8px; background-color: var(--navbar-bg);">
+                                                <div class="progress-bar {{ bar_color }}" role="progressbar" style="width: {{ cat.percentage }}%; border-radius: 4px; box-shadow: 0 0 8px var(--accent-glow);" aria-valuenow="{{ cat.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4">
+                                    {{ _('Gösterilecek ihbar bulunmuyor.') }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

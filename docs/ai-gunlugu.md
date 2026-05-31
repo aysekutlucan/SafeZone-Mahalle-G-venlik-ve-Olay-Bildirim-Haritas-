@@ -224,3 +224,13 @@
 1. **JSON API Endpoint Entegrasyonu (`/api/v1/incidents`):** Harici sistemler veya mobil uygulamaların (simülasyon icabı) sistemdeki tüm ihbarları JSON formatında çekebilmesi için `/api/v1/incidents` GET rotası yazıldı. Bu API ucu veritabanındaki tüm ihbarları çekip, başlık, açıklama ve kategorilerini `translations.py` süzgecinden geçirerek aktif dile duyarlı, tam lokalize bir JSON Array olarak döndürür.
 2. **Ana Sayfa İhbar Arama Çubuğu (Search Bar):** Ana sayfa ihbar listesi paneline (sol sütun) siber temamıza uygun, parlayan neon su yeşili büyüteç ikonlu, yuvarlatılmış köşeli (`rounded-pill`) şık bir arama çubuğu yerleştirildi. Aktif bir arama yapıldığında arama girdisini tek tıkla sıfırlayacak şık bir kapatma butonu eklendi. Arama çubuğunun yer tutucu kelimeleri ("İhbarlarda ara..." / "Search incidents...") dil süzgecine bağlandı.
 3. **LIKE Filtreli Sunucu Tabanlı Arama Algoritması:** `app/main/routes.py` içindeki ana sayfa (index) rotası güncellendi. Arama çubuğundan gelen `q` parametresine göre SQLAlchemy üzerinden `Incident.title.ilike()` ve `Incident.description.ilike()` filtreleri uygulanarak SQLite üzerinde harflerin büyüklük/küçüklüğüne duyarsız tam metin araması yapılması sağlandı. Listelenen ihbarlar ve haritada gösterilen marker'lar bu filtreye göre dinamik olarak filtrelenirken, sayfalama (Pagination) navigasyonu da `q` parametresini koruyacak şekilde güncellendi.
+
+## AI Geliştirme Günlüğü - Oturum 23
+**Tarih:** 31.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Dinamik İhbar İstatistikleri Altyapısı (Incident Analytics):** SafeZone yönetim kontrol kabiliyetlerini artırmak amacıyla arka planda dinamik veri toplama ve analitik hesaplamalar geliştirildi.
+2. **routes.py Veri Kümeleme Sorguları:** `app/main/routes.py` dosyası içindeki `index` rotası güncellendi. `db.func.count()` kullanılarak kategorilere göre olay sayıları ve en çok ihbar alan "En Yoğun Mahalle" bilgisi SQLAlchemy gruplama sorgularıyla veritabanından çekilip şablona aktarıldı.
+3. **index.html Siber Analitik Kartı:** Harita panelinin hemen altına siber temaya ve neon yeşil detaylara tam uyumlu bir "İhbar İstatistikleri" paneli eklendi. Panelde toplam ihbar sayısı ve en yoğun mahalle bilgisi kutular halinde gösterilirken, kategorisel dağılımlar Bootstrap Progress Bar bileşenleri ile dinamik yüzdesel oranlarda görselleştirildi.
+4. **translations.py Lokalizasyon Kelimeleri:** İstatistik paneli için gerekli olan arayüz başlıkları ("İhbar İstatistikleri", "Kategorilere Göre Dağılım", "En Yoğun Mahalle") İngilizce ve Türkçe karşılıklarıyla sisteme entegre edildi.

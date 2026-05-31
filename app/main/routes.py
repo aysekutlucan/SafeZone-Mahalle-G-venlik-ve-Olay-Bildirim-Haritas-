@@ -18,7 +18,43 @@ def index():
     all_incidents = query.order_by(Incident.created_at.desc()).all()
     pagination = query.order_by(Incident.created_at.desc()).paginate(page=page, per_page=5, error_out=False)
     incidents = pagination.items
-    return render_template('main/index.html', incidents=incidents, pagination=pagination, all_incidents=all_incidents, search_query=q)
+    
+    # Dynamic Incident Analytics Calculations
+    from flask import session
+    
+    category_counts = db.session.query(
+        Incident.category,
+        db.func.count(Incident.id)
+    ).group_by(Incident.category).all()
+    
+    neighborhood_counts = db.session.query(
+        Incident.neighborhood_name,
+        db.func.count(Incident.id)
+    ).group_by(Incident.neighborhood_name).order_by(db.func.count(Incident.id).desc()).all()
+    
+    total_count = sum(count for cat, count in category_counts)
+    
+    lang = session.get('lang', 'tr')
+    most_intensive = "Yok" if lang != 'en' else "None"
+    if neighborhood_counts:
+        most_intensive = neighborhood_counts[0][0]
+        
+    stats = {
+        'total': total_count,
+        'most_intensive_neighborhood': most_intensive,
+        'categories': []
+    }
+    
+    for cat, count in category_counts:
+        percentage = round((count / total_count * 100), 1) if total_count > 0 else 0
+        stats['categories'].append({
+            'name': cat,
+            'count': count,
+            'percentage': percentage
+        })
+    stats['categories'].sort(key=lambda x: x['count'], reverse=True)
+    
+    return render_template('main/index.html', incidents=incidents, pagination=pagination, all_incidents=all_incidents, search_query=q, stats=stats)
 
 @main_bp.route('/incident/new', methods=['GET', 'POST'])
 @login_required

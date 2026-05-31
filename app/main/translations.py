@@ -34,6 +34,9 @@ TRANSLATIONS = {
         
         # search input
         'i̇hbarlarda ara...': 'İhbarlarda ara...',
+        'ihbar istatistikleri': 'İhbar İstatistikleri',
+        'kategorilere gore dagilim': 'Kategorilere Göre Dağılım',
+        'en yogun mahalle': 'En Yoğun Mahalle',
         
         # categories
         'hirsizlik': 'Hırsızlık',
@@ -184,6 +187,9 @@ TRANSLATIONS = {
         
         # search input
         'i̇hbarlarda ara...': 'Search incidents...',
+        'ihbar istatistikleri': 'Incident Analytics',
+        'kategorilere gore dagilim': 'Distribution by Category',
+        'en yogun mahalle': 'Most Intensive Neighborhood',
         
         # categories
         'hirsizlik': 'Theft',

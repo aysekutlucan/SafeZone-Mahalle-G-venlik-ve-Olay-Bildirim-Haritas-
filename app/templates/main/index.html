@@ -482,7 +482,7 @@
                         <!-- Stats numbers -->
                         <div class="col-md-5 d-flex flex-column gap-3 justify-content-center">
                             <div class="p-3 analytics-stat-card">
-                                <small class="text-muted d-block mb-1">{% if active_lang == 'en' %}Total Incident Count{% else %}Toplam İhbar Sayısı{% endif %}</small>
+                                <small class="text-muted d-block mb-1">{{ _('Toplam İhbar Sayısı') }}</small>
                                 <h3 class="fw-bold m-0 text-white d-flex align-items-center gap-2" style="color: var(--text-color) !important;">
                                     <i class="bi bi-broadcast text-danger animate-pulse"></i>
                                     {{ stats.total }}

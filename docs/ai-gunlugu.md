@@ -234,3 +234,12 @@
 2. **routes.py Veri Kümeleme Sorguları:** `app/main/routes.py` dosyası içindeki `index` rotası güncellendi. `db.func.count()` kullanılarak kategorilere göre olay sayıları ve en çok ihbar alan "En Yoğun Mahalle" bilgisi SQLAlchemy gruplama sorgularıyla veritabanından çekilip şablona aktarıldı.
 3. **index.html Siber Analitik Kartı:** Harita panelinin hemen altına siber temaya ve neon yeşil detaylara tam uyumlu bir "İhbar İstatistikleri" paneli eklendi. Panelde toplam ihbar sayısı ve en yoğun mahalle bilgisi kutular halinde gösterilirken, kategorisel dağılımlar Bootstrap Progress Bar bileşenleri ile dinamik yüzdesel oranlarda görselleştirildi.
 4. **translations.py Lokalizasyon Kelimeleri:** İstatistik paneli için gerekli olan arayüz başlıkları ("İhbar İstatistikleri", "Kategorilere Göre Dağılım", "En Yoğun Mahalle") İngilizce ve Türkçe karşılıklarıyla sisteme entegre edildi.
+
+## AI Geliştirme Günlüğü - Oturum 24
+**Tarih:** 31.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **İhbar İstatistikleri Dil Senkronizasyon Hatası Düzeltimi:** İstatistik paneli ana başlığı olan `"İhbar İstatistikleri"` kelimesinin İngilizceye çevrilememe pürüzü giderildi.
+2. **translations.py Dil Haritalaması Güncellemesi:** Türkçe büyük `"İ"` harfinin Python `.lower()` fonksiyonunda birleştirici nokta (`\u0069\u0307`) olarak çözümlenmesinden kaynaklanan dil eşleştirme hatasını önlemek için `translations.py` dosyasına `"i̇hbar i̇statistikleri"` (birleştirici noktalı) anahtarı hem TR hem de EN karşılıklarıyla eklenerek dil kararlılığı kesinleştirildi.
+3. **Şablon Dil Süzgeci Entegrasyonları:** `index.html` sayfasındaki tüm analitik etiketleri, başlıklar ve sayaç alanları küresel `_()` süzgecine tam uyumlu hale getirildi.

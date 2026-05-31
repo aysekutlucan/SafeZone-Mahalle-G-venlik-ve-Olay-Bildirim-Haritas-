@@ -32,6 +32,9 @@ TRANSLATIONS = {
         'next': 'Sonraki',
         'toplam i̇hbar': 'Toplam İhbar',
         
+        # search input
+        'i̇hbarlarda ara...': 'İhbarlarda ara...',
+        
         # categories
         'hirsizlik': 'Hırsızlık',
         'supheli': 'Şüpheli Durum',
@@ -178,6 +181,9 @@ TRANSLATIONS = {
         'prev': 'Previous',
         'next': 'Next',
         'toplam i̇hbar': 'Total Incidents',
+        
+        # search input
+        'i̇hbarlarda ara...': 'Search incidents...',
         
         # categories
         'hirsizlik': 'Theft',

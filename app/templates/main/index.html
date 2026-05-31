@@ -214,6 +214,66 @@
             border-color: var(--card-border);
             color: var(--text-muted);
         }
+
+        /* Cyber-themed Search Input Styles */
+        .cyber-search-group {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            border-radius: 50px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cyber-search-group:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .cyber-search-input {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            color: var(--text-color) !important;
+            padding-left: 0.75rem;
+            outline: none;
+            flex-grow: 1;
+        }
+        .cyber-search-icon {
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+            color: var(--accent-color);
+            font-size: 1rem;
+        }
+        .cyber-search-clear {
+            display: flex;
+            align-items: center;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        .cyber-search-clear:hover {
+            color: var(--accent-color);
+        }
+        .cyber-search-btn {
+            background-color: var(--accent-color) !important;
+            color: var(--btn-primary-text) !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 0.375rem 1.25rem !important;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .cyber-search-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
     </style>
 
     <!-- Upper Welcome Banner -->
@@ -263,6 +323,24 @@
                     </button>
                 </div>
             {% endif %}
+
+            <!-- Cyber-themed Search Input -->
+            <form method="GET" action="{{ url_for('main.index') }}" class="mb-3">
+                <div class="cyber-search-group">
+                    <span class="cyber-search-icon">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="q" value="{{ search_query or '' }}" class="cyber-search-input form-control" placeholder="{{ _('İhbarlarda ara...') }}" autocomplete="off">
+                    {% if search_query %}
+                        <a href="{{ url_for('main.index') }}" class="cyber-search-clear" title="Clear Search">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </a>
+                    {% endif %}
+                    <button type="submit" class="cyber-search-btn btn">
+                        {% if active_lang == 'en' %}Search{% else %}Ara{% endif %}
+                    </button>
+                </div>
+            </form>
             
             <div class="scrollable-incident-list">
                 {% for incident in incidents %}
@@ -322,7 +400,7 @@
                 <ul class="pagination justify-content-center custom-pagination">
                     <!-- Previous Page -->
                     <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
-                        <a class="page-link shadow-sm" href="{{ url_for('main.index', page=pagination.prev_num) if pagination.has_prev else '#' }}" tabindex="-1" aria-disabled="true">
+                        <a class="page-link shadow-sm" href="{{ url_for('main.index', page=pagination.prev_num, q=search_query or None) if pagination.has_prev else '#' }}" tabindex="-1" aria-disabled="true">
                             <i class="bi bi-chevron-left"></i>
                         </a>
                     </li>
@@ -331,7 +409,7 @@
                     {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
                         {% if page_num %}
                             <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-                                <a class="page-link shadow-sm" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                                <a class="page-link shadow-sm" href="{{ url_for('main.index', page=page_num, q=search_query or None) }}">{{ page_num }}</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
@@ -342,7 +420,7 @@
 
                     <!-- Next Page -->
                     <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-                        <a class="page-link shadow-sm" href="{{ url_for('main.index', page=pagination.next_num) if pagination.has_next else '#' }}">
+                        <a class="page-link shadow-sm" href="{{ url_for('main.index', page=pagination.next_num, q=search_query or None) if pagination.has_next else '#' }}">
                             <i class="bi bi-chevron-right"></i>
                         </a>
                     </li>

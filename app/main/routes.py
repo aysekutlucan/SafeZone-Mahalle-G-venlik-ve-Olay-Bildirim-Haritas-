@@ -9,10 +9,16 @@ from app.models import Incident
 @main_bp.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-    all_incidents = Incident.query.order_by(Incident.created_at.desc()).all()
-    pagination = Incident.query.order_by(Incident.created_at.desc()).paginate(page=page, per_page=5, error_out=False)
+    q = request.args.get('q', '', type=str).strip()
+    
+    query = Incident.query
+    if q:
+        query = query.filter(Incident.title.ilike(f"%{q}%") | Incident.description.ilike(f"%{q}%"))
+        
+    all_incidents = query.order_by(Incident.created_at.desc()).all()
+    pagination = query.order_by(Incident.created_at.desc()).paginate(page=page, per_page=5, error_out=False)
     incidents = pagination.items
-    return render_template('main/index.html', incidents=incidents, pagination=pagination, all_incidents=all_incidents)
+    return render_template('main/index.html', incidents=incidents, pagination=pagination, all_incidents=all_incidents, search_query=q)
 
 @main_bp.route('/incident/new', methods=['GET', 'POST'])
 @login_required
@@ -159,3 +165,46 @@ def delete_incident(id):
     msg = 'Incident successfully removed!' if lang == 'en' else 'İhbar başarıyla kaldırıldı!'
     flash(msg, 'success')
     return redirect(url_for('main.index'))
+
+@main_bp.route('/api/v1/incidents', methods=['GET'])
+def get_incidents_api():
+    from flask import jsonify, session
+    from app.main.translations import TRANSLATIONS
+    
+    lang = session.get('lang', 'tr')
+    if lang not in ['tr', 'en']:
+        lang = 'tr'
+        
+    def translate(key):
+        if not key:
+            return ''
+        cleaned_key = key.strip().lower()
+        lookup_key = cleaned_key.replace('ı', 'i').replace('ğ', 'g').replace('ü', 'u').replace('ş', 's').replace('ö', 'o').replace('ç', 'c')
+        
+        translation_dict = TRANSLATIONS.get(lang, {})
+        
+        if lookup_key in translation_dict:
+            return translation_dict[lookup_key]
+        elif cleaned_key in translation_dict:
+            return translation_dict[cleaned_key]
+        elif key in translation_dict:
+            return translation_dict[key]
+            
+        return key
+
+    incidents = Incident.query.order_by(Incident.created_at.desc()).all()
+    results = []
+    for inc in incidents:
+        results.append({
+            "id": inc.id,
+            "title": translate(inc.title),
+            "description": translate(inc.description),
+            "category": translate(inc.category),
+            "neighborhood_name": inc.neighborhood_name,
+            "latitude": inc.latitude,
+            "longitude": inc.longitude,
+            "created_at": inc.created_at.isoformat(),
+            "user_id": inc.user_id,
+            "author_username": inc.author.username if inc.author else None
+        })
+    return jsonify(results)

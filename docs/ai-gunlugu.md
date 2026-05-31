@@ -215,3 +215,12 @@
 1. **Kullanıcı Profili (profile.html) Çoklu Dil Entegrasyonu:** Kullanıcı profili (`profile.html`) sayfasındaki dil desteği eksiklikleri giderilerek sayfa tamamen dinamik ve %100 lokalize (TR/EN) hale getirildi. Sayfa başlıkları, kullanıcı bilgisi etiketleri, geçmiş ihbarlar ve silme durumları dil süzgecine bağlandı.
 2. **translations.py Profil Kelimelerinin Eklenmesi:** Profil sayfasındaki tüm statik kelimeler ("Kullanıcı Profili", "Kullanıcı Adı", "Rol", "Bildirdiğim Olaylar", "Koordinatlar" vb.) ve "Henüz bildirdiğiniz bir olay bulunmuyor." gibi geri bildirim uyarısının İngilizce karşılıkları `translations.py` dosyasına dahil edildi.
 3. **Profil Sayfası Jinja2 Veri Çevirisi:** Profil sayfasında listelenen ihbarların `incident.title` (başlık), `incident.description` (açıklama) ve `incident.category` (kategori) alanları `_()` küresel çeviri fonksiyonundan geçirilerek veri tabanından gelen geçmiş ihbarların da dil seçimine göre pürüzsüzce yerelleştirilmesi sağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 22
+**Tarih:** 31.05.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **JSON API Endpoint Entegrasyonu (`/api/v1/incidents`):** Harici sistemler veya mobil uygulamaların (simülasyon icabı) sistemdeki tüm ihbarları JSON formatında çekebilmesi için `/api/v1/incidents` GET rotası yazıldı. Bu API ucu veritabanındaki tüm ihbarları çekip, başlık, açıklama ve kategorilerini `translations.py` süzgecinden geçirerek aktif dile duyarlı, tam lokalize bir JSON Array olarak döndürür.
+2. **Ana Sayfa İhbar Arama Çubuğu (Search Bar):** Ana sayfa ihbar listesi paneline (sol sütun) siber temamıza uygun, parlayan neon su yeşili büyüteç ikonlu, yuvarlatılmış köşeli (`rounded-pill`) şık bir arama çubuğu yerleştirildi. Aktif bir arama yapıldığında arama girdisini tek tıkla sıfırlayacak şık bir kapatma butonu eklendi. Arama çubuğunun yer tutucu kelimeleri ("İhbarlarda ara..." / "Search incidents...") dil süzgecine bağlandı.
+3. **LIKE Filtreli Sunucu Tabanlı Arama Algoritması:** `app/main/routes.py` içindeki ana sayfa (index) rotası güncellendi. Arama çubuğundan gelen `q` parametresine göre SQLAlchemy üzerinden `Incident.title.ilike()` ve `Incident.description.ilike()` filtreleri uygulanarak SQLite üzerinde harflerin büyüklük/küçüklüğüne duyarsız tam metin araması yapılması sağlandı. Listelenen ihbarlar ve haritada gösterilen marker'lar bu filtreye göre dinamik olarak filtrelenirken, sayfalama (Pagination) navigasyonu da `q` parametresini koruyacak şekilde güncellendi.

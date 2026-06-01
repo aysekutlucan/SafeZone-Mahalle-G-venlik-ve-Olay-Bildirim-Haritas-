@@ -29,7 +29,9 @@ def create_app(config_name='default'):
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
     # Flask-Login: oturumdan kullanıcıyı yükle
-    from app.models import User
+    from app.models import User, SafeZoneAnonymousUser
+
+    login_manager.anonymous_user = SafeZoneAnonymousUser
 
     @login_manager.user_loader
     def load_user(user_id):

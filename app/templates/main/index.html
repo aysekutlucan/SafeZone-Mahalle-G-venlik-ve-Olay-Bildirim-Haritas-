@@ -737,7 +737,12 @@
                     throw new Error(isEn ? 'Request failed.' : 'İstek başarısız oldu.');
                 })
                 .then(data => {
-                    window.location.reload();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.has('q')) {
+                        window.location.href = "/";
+                    } else {
+                        window.location.reload();
+                    }
                 })
                 .catch(error => {
                     console.error('Hata:', error);

@@ -9,10 +9,12 @@ from app.models import Incident
 @main_bp.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-    q = request.args.get('q', '', type=str).strip()
+    q = request.args.get('q', None)
+    if q is not None:
+        q = q.strip()
     
     query = Incident.query
-    if q:
+    if q is not None and q != "":
         query = query.filter(Incident.title.ilike(f"%{q}%") | Incident.description.ilike(f"%{q}%"))
         
     all_incidents = query.order_by(Incident.created_at.desc()).all()

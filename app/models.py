@@ -2,7 +2,7 @@ from datetime import datetime
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 
 from app import db
 
@@ -70,6 +70,16 @@ class User(UserMixin, db.Model):
         except Exception:
             return None
         return User.query.get(data['user_id'])
+
+
+class SafeZoneAnonymousUser(AnonymousUserMixin):
+    @property
+    def avatar_img(self):
+        return "img/default-avatar.png"
+
+    @property
+    def has_custom_avatar(self):
+        return False
 
 
 class Incident(db.Model):

@@ -272,3 +272,31 @@
 1. **Jinja2 CSRF Tanımsızlık Hatası (500) Giderilmesi:** `profile.html` içindeki fotoğraf kaldırma formunda global `csrf_token()` çağrısı yapıldığında, uygulamanın global CSRF koruyucusu aktif olmadığı için ortaya çıkan "Jinja2 UndefinedError" 500 sunucu hatası çözümlenmiştir. Çözüm olarak form nesnesiyle doğrudan ilişkili olan ve her zaman tanımlı olan `{{ form.csrf_token }}` yapısı entegre edilmiştir.
 2. **Akıllı Profil Kontrol Mantığının Kapsüllenmesi:** Kullanıcının özel avatarı olup olmadığı kontrolünü şablon kodundan tamamen arındırmak ve daha güvenli kılmak için `User` modeline `has_custom_avatar` adında yeni bir dinamik property eklenmiş, şablondaki kontrol buna bağlanmıştır.
 3. **Güvenli Dosya Silme Kontrolleri:** Profil yükleme temizliği ve kaldırma rotalarında `os.remove()` çağrılırken `FileNotFoundError` olasılığına karşı `try-except FileNotFoundError:` blokları eklenerek dosyanın disktteki varlığından bağımsız olarak kararlı çalışması kesinleştirilmiştir.
+
+## AI Geliştirme Günlüğü - Oturum 26 (Bugfix - Register 500)
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Misafir Kullanıcı 500 Hatası Tanımlaması:** Giriş yapmamış misafir kullanıcılar (AnonymousUser) için avatar ve profil kontrollerinin tetiklenerek 500 Sunucu Hatası oluşturma ihtimali analiz edildi.
+2. **Akıllı AnonymousUser Sınıfının Eklenmesi:** `AnonymousUser` sınıfında `avatar_img` ve `has_custom_avatar` özelliklerinin bulunmamasından kaynaklı olası çökmeleri engellemek için `models.py` içerisine özel `SafeZoneAnonymousUser` sınıfı tanımlandı ve `login_manager`'a bağlandı.
+3. **Register Sayfası Tasarım Güncellemesi:** Ham ve sıradan HTML görüntüsüne sahip olan `/auth/register` (Kayıt Ol) şablonu, kurumsal siber temayla tam uyumlu, siberpunk aura ve premium koyu mod tasarımıyla donatıldı.
+4. **Hatasız Rota ve Giriş Kontrolleri:** Rota mantığının misafir kullanıcılar için sorunsuz ve hatasız çalışması sağlandı.
+
+## AI Geliştirme Günlüğü - Oturum 28 (Bugfix - Email Validator)
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Eksik Bağımlılık (Dependency) Tespiti:** WTForms e-posta doğrulaması (`Email()` validator) yaparken arka planda `email_validator` kütüphanesine ihtiyaç duymakta ve bu kütüphane eksik olduğunda 500 hatası tetiklenmekteydi.
+2. **Gereksinimler Belgesi Güncellemesi:** Projenin bağımlılık listesi olan `requirements.txt` dosyası kontrol edildi, `email-validator` paketi en alt satırda yer alacak şekilde güncellendi ve tanımlandı.
+3. **Sorunsuz Kayıt Doğrulaması:** Paket bağımlılığının tanımlanmasıyla birlikte WTForms e-posta doğrulamasının hatasız şekilde çalıştığı onaylandı.
+
+## AI Geliştirme Günlüğü - Oturum 29 (Bugfix - Simulation Trigger)
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Arama Parametresi Kontrolü ve Optimizasyonu:** `app/main/routes.py` içerisindeki ana sayfa (`index`) rotasında, `q` arama parametresinin `None` veya boş string (`""`) olması durumları hassas şekilde kontrol edildi. Eğer arama parametresi boşsa, veritabanından tüm ihbarların ve harita marker'larının kısıtlanmaksızın eksiksiz ve pürüzsüz dönmesi garantiye alındı.
+2. **Simülasyon Veritabanı Oturumu Sağlamlaştırması:** `app/main/routes.py` içerisindeki `/incident/fake` rotasında simülasyon ihbarı başarıyla oluşturulup eklendikten sonra `db.session.commit()` mührü sıkıca çakılarak veritabanı kararlılığı pekiştirildi.
+3. **AJAX ve URL Arama Temizliği Entegrasyonu:** `app/templates/main/index.html` içerisindeki "Simülasyon İhbarı Tetikle" butonu JavaScript tetikleyicisi güncellendi. Simülasyon tetiklendikten ve yeni veri eklendikten sonra eğer URL'de `?q=` arama parametresi/filtresi aktifse, arayüzün kilitlenmemesi ve yeni verinin anında listelenebilmesi için sayfanın pürüzsüzce temiz ana dizine (`window.location.href = "/"`) yönlendirilmesi sağlandı. Arama parametresi yoksa normal sayfa yenilemesi korundu.

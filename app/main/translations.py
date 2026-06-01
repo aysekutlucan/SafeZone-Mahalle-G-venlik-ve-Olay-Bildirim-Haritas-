@@ -165,7 +165,17 @@ TRANSLATIONS = {
         "Lütfen bir dosya seçin.": "Lütfen bir dosya seçin.",
         "lutfen bir dosya secin.": "Lütfen bir dosya seçin.",
         "Fotoğraf Değiştir": "Fotoğraf Değiştir",
-        "fotograf degistir": "Fotoğraf Değiştir"
+        "fotograf degistir": "Fotoğraf Değiştir",
+        
+        # Profile avatar remove
+        "Fotoğrafı Kaldır": "Fotoğrafı Kaldır",
+        "fotografi kaldir": "Fotoğrafı Kaldır",
+        "Profil fotoğrafınızı silmek istediğinizden emin misiniz?": "Profil fotoğrafınızı silmek istediğinizden emin misiniz?",
+        "profil fotografinizi silmek istediginizden emin misiniz?": "Profil fotoğrafınızı silmek istediğinizden emin misiniz?",
+        "Profil fotoğrafı başarıyla kaldırıldı!": "Profil fotoğrafı başarıyla kaldırıldı!",
+        "profil fotografi basariyla kaldirildi!": "Profil fotoğrafı başarıyla kaldırıldı!",
+        "Kaldırılacak özel profil fotoğrafı bulunamadı.": "Kaldırılacak özel profil fotoğrafı bulunamadı.",
+        "kaldirilacak ozel profil fotografi bulunamadi.": "Kaldırılacak özel profil fotoğrafı bulunamadı."
     },
     'en': {
         # navbar & core
@@ -333,6 +343,16 @@ TRANSLATIONS = {
         "Lütfen bir dosya seçin.": "Please select a file.",
         "lutfen bir dosya secin.": "Please select a file.",
         "Fotoğraf Değiştir": "Change Photo",
-        "fotograf degistir": "Change Photo"
+        "fotograf degistir": "Change Photo",
+        
+        # Profile avatar remove
+        "Fotoğrafı Kaldır": "Remove Photo",
+        "fotografi kaldir": "Remove Photo",
+        "Profil fotoğrafınızı silmek istediğinizden emin misiniz?": "Are you sure you want to delete your profile picture?",
+        "profil fotografinizi silmek istediginizden emin misiniz?": "Are you sure you want to delete your profile picture?",
+        "Profil fotoğrafı başarıyla kaldırıldı!": "Profile picture successfully removed!",
+        "profil fotografi basariyla kaldirildi!": "Profile picture successfully removed!",
+        "Kaldırılacak özel profil fotoğrafı bulunamadı.": "No custom profile picture found to remove.",
+        "kaldirilacak ozel profil fotografi bulunamadi.": "No custom profile picture found to remove."
     }
 }

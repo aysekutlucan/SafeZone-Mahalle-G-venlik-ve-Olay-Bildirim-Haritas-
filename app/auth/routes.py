@@ -101,6 +101,37 @@ def profile():
     return render_template('auth/profile.html', title='Profilim', form=form)
 
 
+@auth_bp.route('/remove_avatar', methods=['POST'])
+@login_required
+def remove_avatar():
+    avatars_dir = os.path.join(current_app.root_path, 'static', 'avatars')
+    deleted = False
+    for ext in ['.jpg', '.jpeg', '.png']:
+        file_path = os.path.join(avatars_dir, f"user_{current_user.id}{ext}")
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+                deleted = True
+            except Exception:
+                pass
+                
+    from flask import session
+    lang = session.get('lang', 'tr')
+    
+    if deleted:
+        if lang == 'en':
+            flash('Profile picture successfully removed!', 'success')
+        else:
+            flash('Profil fotoğrafı başarıyla kaldırıldı!', 'success')
+    else:
+        if lang == 'en':
+            flash('No custom profile picture found to remove.', 'warning')
+        else:
+            flash('Kaldırılacak özel profil fotoğrafı bulunamadı.', 'warning')
+            
+    return redirect(url_for('auth.profile'))
+
+
 @auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:

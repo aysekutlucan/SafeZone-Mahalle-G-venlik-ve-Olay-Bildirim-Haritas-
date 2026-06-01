@@ -254,3 +254,12 @@
 3. **Form ve Rota Güvenliği:** `AvatarUploadForm` ile dosya doğrulama (sadece 'jpg', 'jpeg', 'png' uzantılarına izin verme) ve `werkzeug.utils.secure_filename` kullanılarak güvenli dosya kaydı yapılmıştır.
 4. **Siberpunk CSS Glow ile Tema Uyumlu Profil Tasarımı:** Profil sayfası, Koyu/Açık modda otomatik renk değiştiren siber auralı glowing dairesel avatar çerçevesiyle premium ve modern bir görünüme kavuşturulmuştur.
 5. **Localization (TR/EN):** Avatar yüklemeyle ilgili tüm hata mesajları, buton ve alan etiketleri translations dosyasına eklenmiştir.
+
+## AI Geliştirme Günlüğü - Oturum 26
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Kullanıcı Profilinde Fotoğraf Kaldırma (Avatar Removal) Desteği:** Kullanıcıların istediklerinde kendi yükledikleri profil resimlerini tamamen silerek varsayılan siber kedi avatarına dönmelerini sağlayan `@login_required` korumalı `/auth/remove_avatar` rotası yazılmıştır.
+2. **Koşullu Kaldırma Butonu ve Arayüz Güncellemesi:** Profil sayfasındaki avatar bileşeninin altına, sadece kullanıcının özel resmi mevcutsa render edilen siber kırmızı renkli ve parlayan modern bir "Fotoğrafı Kaldır" butonu eklenmiştir.
+3. **Dinamik Dil ve Bildirim Sistemi:** Kaldırma işlemi başarıyla gerçekleştiğinde diskten ilgili resim kaldırılır ve aktif dil seçeneğine göre yerelleştirilmiş flash bildirimleri gösterilir. Dil dosyasına gerekli çeviriler dahil edilmiştir.

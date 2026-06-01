@@ -263,3 +263,12 @@
 1. **Kullanıcı Profilinde Fotoğraf Kaldırma (Avatar Removal) Desteği:** Kullanıcıların istediklerinde kendi yükledikleri profil resimlerini tamamen silerek varsayılan siber kedi avatarına dönmelerini sağlayan `@login_required` korumalı `/auth/remove_avatar` rotası yazılmıştır.
 2. **Koşullu Kaldırma Butonu ve Arayüz Güncellemesi:** Profil sayfasındaki avatar bileşeninin altına, sadece kullanıcının özel resmi mevcutsa render edilen siber kırmızı renkli ve parlayan modern bir "Fotoğrafı Kaldır" butonu eklenmiştir.
 3. **Dinamik Dil ve Bildirim Sistemi:** Kaldırma işlemi başarıyla gerçekleştiğinde diskten ilgili resim kaldırılır ve aktif dil seçeneğine göre yerelleştirilmiş flash bildirimleri gösterilir. Dil dosyasına gerekli çeviriler dahil edilmiştir.
+
+## AI Geliştirme Günlüğü - Oturum 26 (Hata Ayıklama)
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Jinja2 CSRF Tanımsızlık Hatası (500) Giderilmesi:** `profile.html` içindeki fotoğraf kaldırma formunda global `csrf_token()` çağrısı yapıldığında, uygulamanın global CSRF koruyucusu aktif olmadığı için ortaya çıkan "Jinja2 UndefinedError" 500 sunucu hatası çözümlenmiştir. Çözüm olarak form nesnesiyle doğrudan ilişkili olan ve her zaman tanımlı olan `{{ form.csrf_token }}` yapısı entegre edilmiştir.
+2. **Akıllı Profil Kontrol Mantığının Kapsüllenmesi:** Kullanıcının özel avatarı olup olmadığı kontrolünü şablon kodundan tamamen arındırmak ve daha güvenli kılmak için `User` modeline `has_custom_avatar` adında yeni bir dinamik property eklenmiş, şablondaki kontrol buna bağlanmıştır.
+3. **Güvenli Dosya Silme Kontrolleri:** Profil yükleme temizliği ve kaldırma rotalarında `os.remove()` çağrılırken `FileNotFoundError` olasılığına karşı `try-except FileNotFoundError:` blokları eklenerek dosyanın disktteki varlığından bağımsız olarak kararlı çalışması kesinleştirilmiştir.

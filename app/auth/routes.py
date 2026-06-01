@@ -75,6 +75,8 @@ def profile():
                     if os.path.exists(existing_path):
                         try:
                             os.remove(existing_path)
+                        except FileNotFoundError:
+                            pass
                         except Exception:
                             pass
                 
@@ -112,6 +114,8 @@ def remove_avatar():
             try:
                 os.remove(file_path)
                 deleted = True
+            except FileNotFoundError:
+                pass
             except Exception:
                 pass
                 

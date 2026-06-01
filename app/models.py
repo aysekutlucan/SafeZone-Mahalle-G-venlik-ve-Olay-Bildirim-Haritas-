@@ -42,6 +42,22 @@ class User(UserMixin, db.Model):
         # Varsayılan premium siber kedi avatarı
         return "img/default-avatar.png"
 
+    @property
+    def has_custom_avatar(self):
+        """Kullanıcının özel bir avatarı olup olmadığını döndürür."""
+        import os
+        from flask import current_app
+        static_dir = os.path.join(current_app.root_path, 'static')
+        avatars_dir = os.path.join(static_dir, 'avatars')
+        
+        # Disk üzerinde user_{id}.(png|jpg|jpeg) uzantılı dosyaları kontrol et
+        if os.path.exists(avatars_dir):
+            for ext in ['png', 'jpg', 'jpeg']:
+                filename = f"user_{self.id}.{ext}"
+                if os.path.exists(os.path.join(avatars_dir, filename)):
+                    return True
+        return False
+
     def get_reset_password_token(self):
         s = Serializer(current_app.config['SECRET_KEY'])
         return s.dumps({'user_id': self.id})

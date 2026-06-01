@@ -1,28 +1,199 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>{{ _('Kullanıcı Profili') }}</h2>
-    <p>
-        <strong>{{ _('Kullanıcı Adı') }}:</strong> {{ current_user.username }}<br>
-        <strong>{{ _('E-posta') }}:</strong> {{ current_user.email }}<br>
-        <strong>{{ _('Rol') }}:</strong> {{ _(current_user.role) }}
-    </p>
+<div class="container py-2">
+    <!-- Theme & Glow Synchronization Styles -->
+    <style>
+        .cyber-profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-wrapper {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            margin: 0 auto 1.5rem auto;
+        }
+        
+        .avatar-frame {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow), inset 0 0 15px var(--accent-glow);
+            padding: 6px;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .avatar-frame:hover {
+            box-shadow: 0 0 30px var(--accent-color), inset 0 0 20px var(--accent-glow);
+            transform: scale(1.03);
+        }
+        
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-upload-trigger {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            border-radius: 24px;
+            padding: 0.5rem 1.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .btn-upload-trigger:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            background: var(--accent-glow);
+            transform: translateY(-1px);
+        }
+        
+        .incident-list-scroll {
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        /* Elegant Cyber Scrollbar */
+        .incident-list-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .incident-list-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .incident-list-scroll::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 3px;
+        }
+        .incident-list-scroll::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+    </style>
 
-    <hr>
-    
-    <h3>{{ _('Bildirdiğim Olaylar') }}</h3>
-    <ul>
-        {% for incident in current_user.incidents %}
-            <li>
-                <strong>{{ _(incident.title) }}</strong> - {{ _('Kategori') }}: {{ _(incident.category) }} 
-                ({{ _('Mahalle') }}: {{ incident.neighborhood_name }})<br>
-                <em>{{ _('Koordinatlar') }}: [{{ incident.latitude }}, {{ incident.longitude }}]</em><br>
-                <p>{{ _(incident.description) }}</p>
-                <small>{{ _('Tarih') }}: {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-            </li>
-            <br>
-        {% else %}
-            <li>{{ _('Henüz bildirdiğiniz bir olay bulunmuyor.') }}</li>
-        {% endfor %}
-    </ul>
+    <div class="row g-4">
+        <!-- Left Side: Profile Card and Avatar -->
+        <div class="col-lg-4 col-md-5">
+            <div class="cyber-profile-card">
+                <div class="avatar-wrapper">
+                    <div class="avatar-frame">
+                        <img src="{{ url_for('static', filename=current_user.avatar_img) }}" alt="Avatar" class="avatar-img">
+                    </div>
+                </div>
+                
+                <h4 class="fw-bold mb-1 text-light" style="color: var(--text-color) !important;">{{ current_user.username }}</h4>
+                <p class="text-muted small mb-3">
+                    <span class="badge bg-dark border border-secondary text-capitalize px-3 py-1 rounded-pill">
+                        {{ _(current_user.role) }}
+                    </span>
+                </p>
+
+                <!-- Hidden upload form with instant submit on selection -->
+                <form action="{{ url_for('auth.profile') }}" method="POST" enctype="multipart/form-data" id="avatarForm">
+                    {{ form.hidden_tag() }}
+                    <label for="avatar" class="btn-upload-trigger">
+                        <i class="bi bi-camera-fill"></i>
+                        <span>{{ _('Fotoğraf Değiştir') }}</span>
+                    </label>
+                    <input type="file" name="avatar" id="avatar" accept="image/*" class="d-none" onchange="submitAvatarForm()">
+                </form>
+                
+                <script>
+                    function submitAvatarForm() {
+                        const fileInput = document.getElementById('avatar');
+                        if (fileInput.files.length > 0) {
+                            document.getElementById('avatarForm').submit();
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- Right Side: Profile Details & Incidents -->
+        <div class="col-lg-8 col-md-7">
+            <!-- User Info Metadata Card -->
+            <div class="card border border-secondary rounded-4 p-4 mb-4" style="background-color: var(--card-bg) !important;">
+                <h4 class="fw-bold text-light mb-3" style="color: var(--text-color) !important; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                    <i class="bi bi-person-lines-fill me-2 text-info" style="color: var(--accent-color) !important;"></i>
+                    {{ _('Kullanıcı Profili') }}
+                </h4>
+                
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block" style="font-size: 0.8rem;">{{ _('Kullanıcı Adı') }}</small>
+                        <span class="fw-medium text-light" style="color: var(--text-color) !important; font-size: 1.1rem;">{{ current_user.username }}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block" style="font-size: 0.8rem;">{{ _('E-posta') }}</small>
+                        <span class="fw-medium text-light" style="color: var(--text-color) !important; font-size: 1.1rem;">{{ current_user.email }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incidents Card -->
+            <div class="card border border-secondary rounded-4 p-4" style="background-color: var(--card-bg) !important;">
+                <h4 class="fw-bold text-light mb-3" style="color: var(--text-color) !important; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                    <i class="bi bi-exclamation-triangle-fill me-2 text-warning" style="color: var(--accent-color) !important;"></i>
+                    {{ _('Bildirdiğim Olaylar') }}
+                </h4>
+                
+                <div class="incident-list-scroll">
+                    {% for incident in current_user.incidents %}
+                        <div class="border border-secondary rounded-3 p-3 mb-3" style="background-color: rgba(0, 0, 0, 0.15);">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0 text-light" style="color: var(--text-color) !important; font-size: 1.05rem;">
+                                    {{ _(incident.title) }}
+                                </h5>
+                                <span class="badge bg-secondary text-capitalize px-2 py-1 rounded-pill" style="font-size: 0.75rem;">
+                                    {{ _(incident.category) }}
+                                </span>
+                            </div>
+                            
+                            <p class="text-muted small mb-2">{{ _(incident.description) }}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center text-muted small" style="font-size: 0.8rem;">
+                                <span>
+                                    <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+                                    {{ incident.neighborhood_name }} [{{ incident.latitude }}, {{ incident.longitude }}]
+                                </span>
+                                <span>
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                </span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-clipboard-x display-6 d-block mb-2"></i>
+                            <span>{{ _('Henüz bildirdiğiniz bir olay bulunmuyor.') }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

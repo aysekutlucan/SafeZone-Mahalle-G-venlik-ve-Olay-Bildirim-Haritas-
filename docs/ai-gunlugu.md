@@ -243,3 +243,14 @@
 1. **İhbar İstatistikleri Dil Senkronizasyon Hatası Düzeltimi:** İstatistik paneli ana başlığı olan `"İhbar İstatistikleri"` kelimesinin İngilizceye çevrilememe pürüzü giderildi.
 2. **translations.py Dil Haritalaması Güncellemesi:** Türkçe büyük `"İ"` harfinin Python `.lower()` fonksiyonunda birleştirici nokta (`\u0069\u0307`) olarak çözümlenmesinden kaynaklanan dil eşleştirme hatasını önlemek için `translations.py` dosyasına `"i̇hbar i̇statistikleri"` (birleştirici noktalı) anahtarı hem TR hem de EN karşılıklarıyla eklenerek dil kararlılığı kesinleştirildi.
 3. **Şablon Dil Süzgeci Entegrasyonları:** `index.html` sayfasındaki tüm analitik etiketleri, başlıklar ve sayaç alanları küresel `_()` süzgecine tam uyumlu hale getirildi.
+
+## AI Geliştirme Günlüğü - Oturum 25
+**Tarih:** 01.06.2026  
+**Kullanılan Model:** Gemini 3.5 Flash (Medium)  
+
+### Yapılan İşlemler:
+1. **Kullanıcı Profilinde Avatar Yükleme (Avatar Upload) Desteği:** Profil sayfasına şık ve lüks bir avatar yükleme mekanizması entegre edilmiştir.
+2. **Akıllı Veri Kontrolü ve Varsayılan Kedi Avatarı:** SQLite şemasında göç (migration) hatası riskini önlemek için `User` modeline diski tarayan dinamik bir `avatar_img` / `avatar_url` yapısı eklenmiştir. Yüklenmiş resim yoksa sistem otomatik olarak premium siber kedi avatarını (`default-avatar.png`) kullanır.
+3. **Form ve Rota Güvenliği:** `AvatarUploadForm` ile dosya doğrulama (sadece 'jpg', 'jpeg', 'png' uzantılarına izin verme) ve `werkzeug.utils.secure_filename` kullanılarak güvenli dosya kaydı yapılmıştır.
+4. **Siberpunk CSS Glow ile Tema Uyumlu Profil Tasarımı:** Profil sayfası, Koyu/Açık modda otomatik renk değiştiren siber auralı glowing dairesel avatar çerçevesiyle premium ve modern bir görünüme kavuşturulmuştur.
+5. **Localization (TR/EN):** Avatar yüklemeyle ilgili tüm hata mesajları, buton ve alan etiketleri translations dosyasına eklenmiştir.

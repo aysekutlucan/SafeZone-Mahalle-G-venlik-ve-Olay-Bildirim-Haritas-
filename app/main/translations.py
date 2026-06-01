@@ -153,7 +153,19 @@ TRANSLATIONS = {
         "Su Patlağı / Boru Sızıntısı": "Su Patlağı / Boru Sızıntısı",
         "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.": "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.",
         "Sokak Hayvanı Acil Durum": "Sokak Hayvanı Acil Durum",
-        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi."
+        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.",
+        
+        # Profile & Avatar upload
+        "Profil Resmi Yükle": "Profil Resmi Yükle",
+        "profil resmi yukle": "Profil Resmi Yükle",
+        "Geçersiz dosya formatı!": "Geçersiz dosya formatı!",
+        "gecersiz dosya formati!": "Geçersiz dosya formatı!",
+        "Profil resmi başarıyla güncellendi!": "Profil resmi başarıyla güncellendi!",
+        "profil resmi basariyla guncellendi!": "Profil resmi başarıyla güncellendi!",
+        "Lütfen bir dosya seçin.": "Lütfen bir dosya seçin.",
+        "lutfen bir dosya secin.": "Lütfen bir dosya seçin.",
+        "Fotoğraf Değiştir": "Fotoğraf Değiştir",
+        "fotograf degistir": "Fotoğraf Değiştir"
     },
     'en': {
         # navbar & core
@@ -309,6 +321,18 @@ TRANSLATIONS = {
         "Su Patlağı / Boru Sızıntısı": "Water Burst / Pipe Leak",
         "Kaldırım kenarındaki şebeke borusundan yoğun su sızıntısı var, yol göle dönmek üzere.": "There is a heavy water leak from the network pipe near the sidewalk, the road is about to flood.",
         "Sokak Hayvanı Acil Durum": "Stray Animal Emergency",
-        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Municipal teams were contacted for an injured and weak stray dog lying at the street corner."
+        "Yaralı ve halsiz durumda sokak köşesinde yatan bir sokak köpeği için belediye ekiplerine haber verildi.": "Municipal teams were contacted for an injured and weak stray dog lying at the street corner.",
+        
+        # Profile & Avatar upload
+        "Profil Resmi Yükle": "Upload Profile Picture",
+        "profil resmi yukle": "Upload Profile Picture",
+        "Geçersiz dosya formatı!": "Invalid file format!",
+        "gecersiz dosya formati!": "Invalid file format!",
+        "Profil resmi başarıyla güncellendi!": "Profile picture successfully updated!",
+        "profil resmi basariyla guncellendi!": "Profile picture successfully updated!",
+        "Lütfen bir dosya seçin.": "Please select a file.",
+        "lutfen bir dosya secin.": "Please select a file.",
+        "Fotoğraf Değiştir": "Change Photo",
+        "fotograf degistir": "Change Photo"
     }
 }

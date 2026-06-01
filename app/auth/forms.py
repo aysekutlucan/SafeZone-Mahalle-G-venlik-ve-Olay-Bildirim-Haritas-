@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
@@ -44,3 +45,11 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Yeni Şifre', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Yeni Şifreyi Onayla', validators=[DataRequired(), EqualTo('password', message='Şifreler eşleşmiyor.')])
     submit = SubmitField('Şifreyi Sıfırla')
+
+
+class AvatarUploadForm(FlaskForm):
+    avatar = FileField('Profil Resmi Yükle', validators=[
+        FileRequired(message='Lütfen bir dosya seçin.'),
+        FileAllowed(['jpg', 'jpeg', 'png'], 'Geçersiz dosya formatı!')
+    ])
+    submit = SubmitField('Yükle')

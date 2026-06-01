@@ -24,6 +24,24 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+    @property
+    def avatar_img(self):
+        """Kullanıcının avatar resminin yolunu döndürür. Akıllı disk-lookup yapısı."""
+        import os
+        from flask import current_app
+        static_dir = os.path.join(current_app.root_path, 'static')
+        avatars_dir = os.path.join(static_dir, 'avatars')
+        
+        # Disk üzerinde user_{id}.(png|jpg|jpeg) uzantılı dosyaları kontrol et
+        if os.path.exists(avatars_dir):
+            for ext in ['png', 'jpg', 'jpeg']:
+                filename = f"user_{self.id}.{ext}"
+                if os.path.exists(os.path.join(avatars_dir, filename)):
+                    return f"avatars/{filename}"
+                    
+        # Varsayılan premium siber kedi avatarı
+        return "img/default-avatar.png"
+
     def get_reset_password_token(self):
         s = Serializer(current_app.config['SECRET_KEY'])
         return s.dumps({'user_id': self.id})

@@ -90,7 +90,7 @@ docker-compose up --build -d
 
 SafeZone Güvenlik Simülasyon Paneli'nin tüm interaktif özelliklerini, kilitli harita sınırlarını ve hata sayfalarını çalışır halde izlemek için aşağıdaki demo video alanını kullanabilirsiniz:
 
-[🚀 SafeZone Proje Demo ve Sunum Videosunu İzlemek İçin Tıklayın (Drive/YouTube Linki)](https://github.com/aysekutlucan/SafeZone-Mahalle-G-venlik-ve-Olay-Bildirim-Haritas-)
+[🚀 SafeZone Proje Demo ve Sunum Videosunu İzlemek İçin Tıklayın (Drive/YouTube Linki)](https://drive.google.com/file/d/1DHbFSJxTzNqB_6GGhJX95e3qoczI98Hw/view?usp=drive_link)
 
 ---
 
